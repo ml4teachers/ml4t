@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
-    "next": "^13.0.6",
+    "ai": "^2.1.8",
+    "next": "^13.4.7",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
+    "openai-edge": "^1.1.0",
+    "pnpm": "^8.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
