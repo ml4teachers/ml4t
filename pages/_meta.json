@@ -1,15 +1,29 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
-  "about": {
-    "title": "About",
+  "index": {
+    "display": "hidden",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false,
+      "layout": "raw"
+    }
+  },
+  "tools": {
+    "title": "Tools",
     "type": "page"
   },
-  "contact": {
-    "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
+  "teaching": {
+    "title": "Unterricht",
+    "type": "page"
+  },
+  "glossary": {
+    "title": "Begriffe",
+    "type": "page"
+  },
+  "links": {
+    "title": "Ressourcen",
+    "type": "page"
   }
 }

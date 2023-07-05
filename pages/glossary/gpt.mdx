@@ -1,0 +1,22 @@
+import MDXImage from '/components/MDXImage';
+
+
+# GPT
+Ein **Generative Pretrained Transformer** (GPT) ist ein mathematisches Modell, das für die Erzeugung von Texten entwickelt wurde, die so wirken sollen, als wären sie von einem Menschen geschrieben. Um besser zu verstehen, wie dieses funktioniert, brechen wir den Namen in seine Bestandteile herunter: Generativ, Pretrained und Transformer. Als Anschauungsbeispiel dient uns dafür der Anfang eines Märchens:
+
+
+## Tokenisierung
+Das GPT-Modell kann nicht direkt mit Wörtern oder Sätzen rechnen. Zuerst müssen diese in kleinere Einheiten, sogenannte **Tokens**, zerlegt werden. Ein Token kann ein Wort, ein Wortteil oder sogar ein einzelnes Zeichen sein. Diese Tokens werden dann in eine numerische Form umgewandelt, die das Modell verarbeiten kann.
+
+
+## Transformer
+Die zugrundeliegende Architektur des Modells nennt sich Transformer. Sie ist dafür verantwortlich, den Kontext innerhalb einer Sequenz von Tokens zu verstehen. In einfachen Worten analysiert der Transformer die **Beziehung** zwischen den Tokens und berechnet, wie wichtig ein Token für das Verständnis der anderen ist. Diese Beziehungs- und Bedeutungsanalyse bildet die Grundlage für die Berechnung des wahrscheinlichsten nächsten Tokens.
+
+
+## Generator
+Das Wort **Generativ** weist darauf hin, dass das Modell Texte generieren kann. Es macht dies, indem es basierend auf den bisher verarbeiteten Tokens einen nächsten Token auswählt. Dieser ausgewählte Token hat dabei eine hohe Wahrscheinlichkeit, in einer logischen und grammatikalisch korrekten Weise auf die vorherigen Tokens zu folgen. Da meist mehrere Tokens diese Kriterien erfüllen können, wird bei der Generierung des nächsten Tokens auch eine gewisse Zufälligkeit einbezogen. Daher erzeugt das Modell nicht immer exakt den gleichen Text, selbst wenn die Eingabe gleich bleibt.
+
+
+## Pretraining
+Beim **Pretraining** handelt es sich um den Prozess, bei dem das Modell auf grossen Mengen von Textdaten trainiert wird, bevor es für eine spezifische Aufgabe verwendet wird. In diesem Prozess werden die Parameter des Modells so lange angepasst, bis die Fehlerquote einen minimalen Wert erreicht. Dies ermöglicht dem Modell, allgemeines Sprachverständnis und Kontextwissen zu erwerben, bevor es auf spezielle Aufgaben angewendet wird.
+
