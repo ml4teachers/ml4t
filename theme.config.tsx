@@ -7,7 +7,7 @@ const config: DocsThemeConfig = {
   head: (
     <>
       <link rel="icon" href="/favicon.ico" />
-      <title>KI Tools</title>  // Fügen Sie diesen Tag hinzu
+      <title>KI Tools</title>
       <meta property="og:title" content="KI Tools" />
       <meta property="og:description" content="KI Tools für den Unterricht" />
       <meta property="og:image" content="/og.png" />
