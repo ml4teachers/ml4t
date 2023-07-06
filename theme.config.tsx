@@ -10,6 +10,7 @@ const config: DocsThemeConfig = {
       <title>KI Tools</title>  // Fügen Sie diesen Tag hinzu
       <meta property="og:title" content="KI Tools" />
       <meta property="og:description" content="KI Tools für den Unterricht" />
+      <meta property="og:image" content="/og.png" />
     </>
   ),
   search: {
