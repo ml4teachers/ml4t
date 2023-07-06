@@ -12,7 +12,7 @@ const features = [
     icon: WrenchScrewdriverIcon,
   },
   {
-    link: '/teaching',
+    link: '/teaching/login',
     name: 'Unterricht',
     description:
       'Finde Richtlinien und Empfehlungen für den sinnvollen Einsatz von KI im Unterricht.',
@@ -47,7 +47,7 @@ export default function News() {
   }, []);
 
   return (
-    <div className="bg-white py-24 sm:py-32">
+    <div className="bg-white py-18 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-sky-600">Künstliche Intelligenz für den Unterricht</h2>
