@@ -48,25 +48,25 @@ function Perceptron() {
   }, [selectedMovie]);
 
   const handlePlusClick = (activeSlots = [1, 1, 1]) => {
-    if (activeSlots[0] && w1 < 3) {
+    if (activeSlots[0] && w1 < 5) {
       setW1(prevW1 => prevW1 + 1);
     }
-    if (activeSlots[1] && w2 < 3) {
+    if (activeSlots[1] && w2 < 5) {
       setW2(prevW2 => prevW2 + 1);
     }
-    if (activeSlots[2] && b > -3) {
+    if (activeSlots[2] && b > -5) {
       setB(prevB => prevB - 1);
     }
   }
   
   const handleMinusClick = (activeSlots = [1, 1, 1]) => {
-    if (activeSlots[0] && w1 > -3) {
+    if (activeSlots[0] && w1 > -5) {
       setW1(prevW1 => prevW1 - 1);
     }
-    if (activeSlots[1] && w2 > -3) {
+    if (activeSlots[1] && w2 > -5) {
       setW2(prevW2 => prevW2 - 1);
     }
-    if (activeSlots[2] && b < 3) {
+    if (activeSlots[2] && b < 5) {
       setB(prevB => prevB + 1);
     }
   }
