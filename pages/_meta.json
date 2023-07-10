@@ -6,8 +6,7 @@
       "footer": true,
       "sidebar": false,
       "toc": false,
-      "pagination": false,
-      "layout": "raw"
+      "pagination": false
     }
   },
   "tools": {
