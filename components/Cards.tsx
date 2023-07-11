@@ -39,11 +39,6 @@ function Cards() {
     setSelectedMovie(null);
   }
 
-  const handleInputChange = (e) => {
-    setEditTitle(e.target.value);
-    setSelectedMovie(null);
-  }
-
   const handleEditTitle = (e) => {
     setEditTitle(e.target.value);
   };

@@ -3,6 +3,8 @@ import Slot from './Slot';
 import Overlay from './Overlay';
 import Card from './Card';
 import Cards from './Cards';
+import { PlayIcon, StopIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+
 
 export const UpdateContext = createContext();
 
@@ -11,6 +13,7 @@ function Perceptron() {
   const [w2, setW2] = useState(0);
   const [b, setB] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [iteration, setIteration] = useState(0);
   const [activeSlots, setActiveSlots] = useState([1, 1, 1]);
   const [movies, setMovies] = useState([
     { title: 'Scream', cat1: 0, cat2: 0, like: 0 },
@@ -23,6 +26,7 @@ function Perceptron() {
   const w1Ref = useRef(w1);
   const w2Ref = useRef(w2);
   const bRef = useRef(b);
+  const trainingIntervalRef = useRef(null);
   
   const deleteMovie = (title) => {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.title !== title));
@@ -42,7 +46,21 @@ function Perceptron() {
         movie.title === currentTitle ? { ...movie, title: newTitle } : movie
       )
     );
-  }  
+  }
+
+  const changeMovieCategory = (title, catNum) => {
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.title === title
+          ? {
+              ...movie,
+              [catNum === 1 ? "cat1" : "cat2"]: movie[catNum === 1 ? "cat1" : "cat2"] ? 0 : 1,
+            }
+          : movie
+      )
+    );
+  };
+  
 
   useEffect(() => {
     w1Ref.current = w1;
@@ -106,16 +124,28 @@ function Perceptron() {
     setPredictedLike(null);
   };
   
+  const stopTraining = () => {
+    setTraining(false);
+    setIteration(0);
+    if (trainingIntervalRef.current) {
+      clearInterval(trainingIntervalRef.current);
+      trainingIntervalRef.current = null;
+    }
+  }
+
   const train = () => {
     setTraining(true);
-    let iteration = 0;
-    
-    const trainingInterval = setInterval(() => {
-      iteration++;
-      if (iteration > 20) {
-        clearInterval(trainingInterval);
+    let iterationCount = 0;
+  
+    trainingIntervalRef.current = setInterval(() => {
+      iterationCount++;
+      setIteration(iterationCount);
+      if (iterationCount > 10) {
+        clearInterval(trainingIntervalRef.current);
+        trainingIntervalRef.current = null;
         setTraining(false);
-        setSelectedMovie(false);
+        setSelectedMovie(null);
+        setIteration(0);
       } else {
         const movie = movies[Math.floor(Math.random() * movies.length)];
         setSelectedMovie(movie);
@@ -139,12 +169,12 @@ function Perceptron() {
     <UpdateContext.Provider value={{ 
       w1, w2, b, setW1, setW2, setB,
       selectedMovie, setSelectedMovie,
-      handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle,
+      handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
       predictedLike, movies
       }}>
       <div className="flex flex-col sm:flex-row justify-center">
         <div className="flex justify-center items-center mr-12 mt-10 sm:mr-32 relative">
-          <Card classes={activeSlots} />
+          <Card />
           <Overlay />
           <Slot category="w1" reversed={undefined} active={activeSlots[0]} />
           <Slot category="w2" reversed={undefined} active={activeSlots[1]} />
@@ -152,20 +182,30 @@ function Perceptron() {
         </div>
         <div className="z-30 flex mt-10 sm:mt-0 justify-center">
           <div>
-            <div>
-              <button 
-                className="w-36 h-8 bg-blue-400 text-white border-2 border-gray-300 rounded-md text-center mt-6 cursor-pointer" 
-                onClick={train} 
-                disabled={training}>
-                Training
-              </button>
-            </div>
-            <div>
-              <button 
-                className="w-36 h-8 bg-orange-400 text-white border-2 border-gray-300 rounded-md text-center mt-6 cursor-pointer"
-                onClick={reset}>
-                Reset
-              </button>
+            <div className="flex">
+              <div className="flex-1">
+                  Training({iteration}/10)
+                </div>
+              <div className="flex">
+                <button 
+                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={train} 
+                  disabled={training}
+                  >
+                  <PlayIcon />
+                </button>
+                <button 
+                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={stopTraining}
+                  >
+                  <StopIcon />
+                </button>
+                <button 
+                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={reset}>
+                  <ArrowPathIcon />
+                </button>
+              </div>
             </div>
             <Cards />
           </div>
