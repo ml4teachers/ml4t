@@ -15,7 +15,7 @@ function Perceptron() {
   const [movies, setMovies] = useState([
     { title: 'Scream', cat1: 0, cat2: 0, like: 0 },
     { title: 'Batman', cat1: 1, cat2: 0, like: 1 },
-    { title: 'Simpsons', cat1: 0, cat2: 1, like: 1 },
+    { title: 'Simpsons', cat1: 0, cat2: 1, like: 0 },
     { title: '21 Jump Street', cat1: 1, cat2: 1, like: 1 },
   ]);
   const [training, setTraining] = useState(false);
@@ -23,9 +23,26 @@ function Perceptron() {
   const w1Ref = useRef(w1);
   const w2Ref = useRef(w2);
   const bRef = useRef(b);
+  
   const deleteMovie = (title) => {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.title !== title));
   };
+
+  const likeMovie = (title) => {
+    setMovies((prevMovies) =>
+    prevMovies.map((movie) =>
+      movie.title === title ? { ...movie, like: movie.like ? 0 : 1 } : movie
+    )
+  );
+  }
+
+  const editMovieTitle = (currentTitle, newTitle) => {
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.title === currentTitle ? { ...movie, title: newTitle } : movie
+      )
+    );
+  }  
 
   useEffect(() => {
     w1Ref.current = w1;
@@ -80,6 +97,14 @@ function Perceptron() {
     }
   }, [selectedMovie, w1, w2, b]);
 
+  const reset = () => {
+    setW1(0);
+    setW2(0);
+    setB(0);
+    setSelectedMovie(null);
+    setActiveSlots([1, 1, 1]);
+    setPredictedLike(null);
+  };
   
   const train = () => {
     setTraining(true);
@@ -106,7 +131,7 @@ function Perceptron() {
           handleMinusClick([movie.cat1 ? 1 : 0, movie.cat2 ? 1 : 0, 1]);
         }        
       }
-    }, 200);
+    }, 500);
   };
   
 
@@ -114,8 +139,8 @@ function Perceptron() {
     <UpdateContext.Provider value={{ 
       w1, w2, b, setW1, setW2, setB,
       selectedMovie, setSelectedMovie,
-      handlePlusClick, handleMinusClick,
-      predictedLike, movies, deleteMovie
+      handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle,
+      predictedLike, movies
       }}>
       <div className="flex flex-col sm:flex-row justify-center">
         <div className="flex justify-center items-center mr-12 mt-10 sm:mr-32 relative">
@@ -125,15 +150,26 @@ function Perceptron() {
           <Slot category="w2" reversed={undefined} active={activeSlots[1]} />
           <Slot category="b" reversed active={activeSlots[2]} />
         </div>
-        <div className="flex mt-10 sm:mt-0 justify-center">
-          <Cards />
+        <div className="z-30 flex mt-10 sm:mt-0 justify-center">
+          <div>
+            <div>
+              <button 
+                className="w-36 h-8 bg-blue-400 text-white border-2 border-gray-300 rounded-md text-center mt-6 cursor-pointer" 
+                onClick={train} 
+                disabled={training}>
+                Training
+              </button>
+            </div>
+            <div>
+              <button 
+                className="w-36 h-8 bg-orange-400 text-white border-2 border-gray-300 rounded-md text-center mt-6 cursor-pointer"
+                onClick={reset}>
+                Reset
+              </button>
+            </div>
+            <Cards />
+          </div>
         </div>
-        <button 
-          className="w-36 h-8 bg-blue-500 text-white rounded-md text-center mt-6 cursor-pointer" 
-          onClick={train} 
-          disabled={training}>
-          Training
-        </button>
       </div>
     </UpdateContext.Provider>
   )

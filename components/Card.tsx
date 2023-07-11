@@ -2,14 +2,18 @@ import { useContext } from 'react';
 import { UpdateContext } from './Perceptron';
 
 function Card({ classes }) {
-  const { selectedMovie } = useContext(UpdateContext);
+  const { selectedMovie, setSelectedMovie } = useContext(UpdateContext);
+
+  const handleCardClick = () => {
+    setSelectedMovie(null);
+  };
 
   if (!selectedMovie) return null;
 
   const colorClass = selectedMovie?.like ? 'bg-blue-100' : 'bg-orange-100';
 
   return (
-    <div className={`z-30 absolute w-36 mr-12 h-24 border-2 border-gray-400 rounded-md`}>
+    <div className={`z-30 absolute w-36 mr-12 h-24 border-2 border-gray-400 rounded-md cursor-pointer`} onClick={() => handleCardClick()}>
       <div className="relative h-full">
         <div className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass}`}>
           <div className="text-center text-sm mt-2">{selectedMovie.title}</div>
