@@ -1,11 +1,13 @@
-import { useContext, useState } from 'react';
-import { UpdateContext } from './Perceptron';
+import { useContext, useState, useEffect } from 'react';
+import { UpdateContext } from '../Perceptron';
 import { TrashIcon, HandThumbUpIcon, HandThumbDownIcon, PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline'
 
 function Cards() {
-  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle } = useContext(UpdateContext);
-  const [editing, setEditing] = useState(null);
+  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, addRandomMovie } = useContext(UpdateContext);
+  const [editing, setEditing ] = useState(null);
   const [editTitle, setEditTitle] = useState('');
+  const [deleting, setDeleting] = useState(null);
+
 
   const handleCardClick = (movie) => {
     if (editing !== null) return;
@@ -21,6 +23,12 @@ function Cards() {
     }
   }
   
+  useEffect(() => {
+    if (editing && !movies.find(movie => movie.title === editing)) {
+      setEditing(null);
+    }
+  }, [movies, editing]);
+  
   const handleDeleteClick = (e, title) => {
     e.stopPropagation();
     deleteMovie(title);
@@ -34,10 +42,13 @@ function Cards() {
 
   const handleEditClick = (e, title) => {
     e.stopPropagation();
-    setEditing(title);
-    setEditTitle(title);
-    setSelectedMovie(null);
-  }
+    if (editing === title) {
+      setEditing(null);
+    } else {
+      setEditing(title);
+      setEditTitle(title);
+    }
+  };
 
   const handleEditTitle = (e) => {
     setEditTitle(e.target.value);
@@ -49,7 +60,9 @@ function Cards() {
   }
 
   return (
-    <div className="z-30 flex flex-col justify-center mt-10 relative text-sm leading-7">
+    
+    <div className="z-30 flex flex-col justify-center relative text-sm leading-7">
+      <div className="overflow-auto h-64">
       {movies.map(movie => {
         const colorClass = movie.like ? 'bg-blue-100' : 'bg-orange-100';
         const isEditing = editing === movie.title;
@@ -57,7 +70,7 @@ function Cards() {
         return (
           <div 
             key={movie.title} 
-            className={`group hover:pr-12 relative w-48 my-2 h-8 border-2 ${selectedMovie?.title === movie.title ? 'border-gray-400' : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
+            className={`group hover:pr-16 relative w-56 my-3 h-8 border-2 ${selectedMovie?.title === movie.title ? 'border-gray-400' : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
             onClick={() => handleCardClick(movie)}
           >
             {isEditing ? (
@@ -81,28 +94,35 @@ function Cards() {
                 onClick={(e) => isEditing ? null : handleLikeClick(e, movie.title)}
                 >
                 {isEditing ? (
-                <CheckIcon className="w-6 h-8 text-gray-500 bg-white"/>
+                <CheckIcon className="w-5 h-8 text-gray-500 bg-white"/>
               ) : movie.like ? (
-                <HandThumbUpIcon className="w-6 text-gray-500"/>
+                <HandThumbUpIcon className="w-5 h-8 text-gray-500"/>
               ) : (
-                <HandThumbDownIcon className="w-6 text-gray-500"/>
+                <HandThumbDownIcon className="w-5 h-8 text-gray-500"/>
               )}
               </div>
-              <div 
-                className="transform -translate-y-1/2 opacity-0 group-hover:opacity-100"
-                onClick={editing === movie.title ? (e) => handleDeleteClick(e, movie.title) : (e) => handleEditClick(e, movie.title)}
-              >
-                {editing === movie.title ? (
-                  <TrashIcon className="w-6 text-gray-500 py-1"/>
-                ) : (
-                  <PencilSquareIcon className="w-6 text-gray-500"/>
-                )}
+              <div className="z-50 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+                <PencilSquareIcon
+                    className="w-5 h-8 ml-1 text-gray-500"
+                    onClick={(e) => handleEditClick(e, movie.title)}
+                  />
+              </div>
+              <div className="z-50 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+                <TrashIcon
+                  className="w-5 h-8 ml-1 text-gray-500"
+                  onClick={(e) => handleDeleteClick(e, movie.title)}
+                />
               </div>
             </div>
           </div>
         );
       })}
+      </div>
+      <div className={`group relative w-56 my-2 h-8 border-2 rounded-md text-center cursor-pointer bg-gray-100 hover:bg-gray-50`} onClick={addRandomMovie}>
+        Neuer Film
+      </div>
     </div>
+
   );
 }
 

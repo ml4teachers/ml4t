@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UpdateContext } from './Perceptron';
+import { UpdateContext } from '../Perceptron';
 
 function Overlay() {
   const { selectedMovie, handlePlusClick, handleMinusClick, predictedLike } = useContext(UpdateContext);

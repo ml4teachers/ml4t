@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { UpdateContext } from './Perceptron';
+import { UpdateContext } from '../Perceptron';
 
 function Card() {
   const { selectedMovie, setSelectedMovie, changeMovieCategory } = useContext(UpdateContext);
@@ -28,7 +28,7 @@ function Card() {
     <div className={`z-30 absolute w-36 mr-12 h-24 border-2 border-gray-400 rounded-md`}>
       <div className="relative h-full">
         <div className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass} cursor-pointer`} onClick={() => handleCardClick()}>
-          <div className="text-center text-sm mt-2">{selectedMovie.title}</div>
+          <div className="text-center text-sm mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
         </div>
         <div className={`absolute top-7 left-0 w-3.5 h-10 ${colorClass}`}></div>
         <div className={`absolute top-7 left-3.5 w-8 h-10 rounded-sm text-lg leading-9 indent-3 text-gray-600 ${movieCategories.cat1 ? 'hidden' : ''} ${colorClass}`}>0</div>

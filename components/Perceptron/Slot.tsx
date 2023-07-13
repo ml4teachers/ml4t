@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { UpdateContext } from './Perceptron';
+import { UpdateContext } from '../Perceptron';
 import Number from './Number';
 
 function Slot({ category, reversed, active }) {

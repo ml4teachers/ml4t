@@ -1,36 +1,40 @@
 import React, { useState, createContext, useEffect, useRef } from 'react';
-import Slot from './Slot';
-import Overlay from './Overlay';
-import Card from './Card';
-import Cards from './Cards';
-import { PlayIcon, StopIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
-
+import Slot from './Perceptron/Slot';
+import Overlay from './Perceptron/Overlay';
+import Card from './Perceptron/Card';
+import Cards from './Perceptron/Cards';
+import useMovies from './Perceptron/useMovies';
+import useTraining from './Perceptron/useTraining';
+import { PlayIcon, StopIcon, ArrowPathIcon, ForwardIcon, PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/outline'
 
 export const UpdateContext = createContext();
 
 function Perceptron() {
-  const [w1, setW1] = useState(0);
-  const [w2, setW2] = useState(0);
-  const [b, setB] = useState(0);
+  const { movies, setMovies, deleteMovie, addRandomMovie } = useMovies();
+  const { w1, w2, b, setW1, setW2, setB, training, iteration, 
+    tempo, setTempo, tempoValues, handlePlusClick, handleMinusClick, startTraining, stopTraining } = useTraining([0, 0], 0, movies);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [iteration, setIteration] = useState(0);
   const [activeSlots, setActiveSlots] = useState([1, 1, 1]);
-  const [movies, setMovies] = useState([
-    { title: 'Scream', cat1: 0, cat2: 0, like: 0 },
-    { title: 'Batman', cat1: 1, cat2: 0, like: 1 },
-    { title: 'Simpsons', cat1: 0, cat2: 1, like: 0 },
-    { title: '21 Jump Street', cat1: 1, cat2: 1, like: 1 },
-  ]);
-  const [training, setTraining] = useState(false);
   const [predictedLike, setPredictedLike] = useState(null);
-  const w1Ref = useRef(w1);
-  const w2Ref = useRef(w2);
-  const bRef = useRef(b);
-  const trainingIntervalRef = useRef(null);
-  
-  const deleteMovie = (title) => {
-    setMovies((prevMovies) => prevMovies.filter((movie) => movie.title !== title));
-  };
+  const [classes, setClasses] = useState(2);
+
+  useEffect(() => {
+    if (selectedMovie) {
+      setActiveSlots([selectedMovie.cat1 ? 1 : 0, selectedMovie.cat2 ? 1 : 0, 1]);
+    } else {
+      setActiveSlots([1, 1, 1]);
+    }
+  }, [selectedMovie]);
+
+  useEffect(() => {
+    if (selectedMovie) {
+      const activeWeightSum = (selectedMovie.cat1 ? w1 : 0) + (selectedMovie.cat2 ? w2 : 0);
+      setPredictedLike(activeWeightSum > b);
+    } else {
+      setPredictedLike(null);
+    }
+  }, [selectedMovie, w1, w2, b]);
+
 
   const likeMovie = (title) => {
     setMovies((prevMovies) =>
@@ -61,60 +65,6 @@ function Perceptron() {
     );
   };
   
-
-  useEffect(() => {
-    w1Ref.current = w1;
-  }, [w1]);
-
-  useEffect(() => {
-    w2Ref.current = w2;
-  }, [w2]);
-
-  useEffect(() => {
-    bRef.current = b;
-  }, [b]);
-
-  useEffect(() => {
-    if (selectedMovie) {
-      setActiveSlots([selectedMovie.cat1 ? 1 : 0, selectedMovie.cat2 ? 1 : 0, 1]);
-    } else {
-      setActiveSlots([1, 1, 1]);
-    }
-  }, [selectedMovie]);
-
-  const handlePlusClick = (activeSlots = [1, 1, 1]) => {
-    if (activeSlots[0] && w1 < 5) {
-      setW1(prevW1 => prevW1 + 1);
-    }
-    if (activeSlots[1] && w2 < 5) {
-      setW2(prevW2 => prevW2 + 1);
-    }
-    if (activeSlots[2] && b > -5) {
-      setB(prevB => prevB - 1);
-    }
-  }
-  
-  const handleMinusClick = (activeSlots = [1, 1, 1]) => {
-    if (activeSlots[0] && w1 > -5) {
-      setW1(prevW1 => prevW1 - 1);
-    }
-    if (activeSlots[1] && w2 > -5) {
-      setW2(prevW2 => prevW2 - 1);
-    }
-    if (activeSlots[2] && b < 5) {
-      setB(prevB => prevB + 1);
-    }
-  }
-
-  useEffect(() => {
-    if (selectedMovie) {
-      const activeWeightSum = (selectedMovie.cat1 ? w1 : 0) + (selectedMovie.cat2 ? w2 : 0);
-      setPredictedLike(activeWeightSum > b);
-    } else {
-      setPredictedLike(null);
-    }
-  }, [selectedMovie, w1, w2, b]);
-
   const reset = () => {
     setW1(0);
     setW2(0);
@@ -123,54 +73,30 @@ function Perceptron() {
     setActiveSlots([1, 1, 1]);
     setPredictedLike(null);
   };
-  
-  const stopTraining = () => {
-    setTraining(false);
-    setIteration(0);
-    if (trainingIntervalRef.current) {
-      clearInterval(trainingIntervalRef.current);
-      trainingIntervalRef.current = null;
+
+  const faster = () => {
+    const currentTempoIndex = tempoValues.indexOf(tempo);
+
+    if (currentTempoIndex === tempoValues.length - 1) {
+      setTempo(tempoValues[0]);
+    } else {
+      setTempo(tempoValues[currentTempoIndex + 1]);
     }
   }
 
-  const train = () => {
-    setTraining(true);
-    let iterationCount = 0;
+  const classesPlus = (plus) => {
+    if (plus) {
+      setClasses(classes => classes < 5 ? classes + 1 : classes);
+    } else {
+      setClasses(classes => classes > 1 ? classes - 1 : classes);
+    }
+    console.log(classes)
+}
   
-    trainingIntervalRef.current = setInterval(() => {
-      iterationCount++;
-      setIteration(iterationCount);
-      if (iterationCount > 10) {
-        clearInterval(trainingIntervalRef.current);
-        trainingIntervalRef.current = null;
-        setTraining(false);
-        setSelectedMovie(null);
-        setIteration(0);
-      } else {
-        const movie = movies[Math.floor(Math.random() * movies.length)];
-        setSelectedMovie(movie);
-  
-        const activeWeightSum = (movie.cat1 ? w1Ref.current : 0) + (movie.cat2 ? w2Ref.current : 0);
-        const predictedLike = activeWeightSum > bRef.current ? 1 : 0;
-  
-        if (movie.like > predictedLike) {
-          setActiveSlots([movie.cat1 ? 1 : 0, movie.cat2 ? 1 : 0, 1]);
-          handlePlusClick([movie.cat1 ? 1 : 0, movie.cat2 ? 1 : 0, 1]);
-        } else if (movie.like < predictedLike) {
-          setActiveSlots([movie.cat1 ? 1 : 0, movie.cat2 ? 1 : 0, 1]);
-          handleMinusClick([movie.cat1 ? 1 : 0, movie.cat2 ? 1 : 0, 1]);
-        }        
-      }
-    }, 500);
-  };
-  
-
   return (
     <UpdateContext.Provider value={{ 
-      w1, w2, b, setW1, setW2, setB,
-      selectedMovie, setSelectedMovie,
-      handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
-      predictedLike, movies
+      w1, w2, b, setW1, setW2, setB, selectedMovie, setSelectedMovie, predictedLike, movies, 
+      addRandomMovie, handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
       }}>
       <div className="flex flex-col sm:flex-row justify-center">
         <div className="flex justify-center items-center mr-12 mt-10 sm:mr-32 relative">
@@ -181,29 +107,54 @@ function Perceptron() {
           <Slot category="b" reversed active={activeSlots[2]} />
         </div>
         <div className="z-30 flex mt-10 sm:mt-0 justify-center">
-          <div>
-            <div className="flex">
-              <div className="flex-1">
-                  Training({iteration}/10)
-                </div>
+          <div className="flex-row">
+            <div className="flex my-2">
+              <div className="flex-1 ">
+                Genres({classes}/5)
+              </div>
               <div className="flex">
                 <button 
-                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
-                  onClick={train} 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={() => classesPlus(true)}
+                  >
+                  <PlusCircleIcon />
+                </button>
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={() => classesPlus(false)}
+                  >
+                  <MinusCircleIcon />
+                </button>
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={reset}>
+                  <ArrowPathIcon />
+                </button>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="flex-1 ">
+               Training({iteration}/{tempo})
+              </div>
+              <div className="flex">
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={startTraining} 
                   disabled={training}
                   >
                   <PlayIcon />
                 </button>
                 <button 
-                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
+                  className="w-6 mb-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={faster}
+                  >
+                  <ForwardIcon />
+                </button>
+                <button 
+                  className="w-6 text-gray-500 rounded-md text-center cursor-pointer"
                   onClick={stopTraining}
                   >
                   <StopIcon />
-                </button>
-                <button 
-                  className="w-7 p-1 text-gray-500 rounded-md text-center cursor-pointer"
-                  onClick={reset}>
-                  <ArrowPathIcon />
                 </button>
               </div>
             </div>
