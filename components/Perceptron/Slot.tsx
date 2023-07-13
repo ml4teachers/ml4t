@@ -3,23 +3,20 @@ import { UpdateContext } from '../Perceptron';
 import Number from './Number';
 
 function Slot({ category, reversed, active }) {
-  const { w1, w2, b, setW1, setW2, setB } = useContext(UpdateContext);
+  const { weights, setWeights, b, setB, activeSlots } = useContext(UpdateContext);
   let value, setValue;
-  switch(category) {
-    case 'w1':
-      value = w1;
-      setValue = setW1;
-      break;
-    case 'w2':
-      value = w2;
-      setValue = setW2;
-      break;
-    case 'b':
-      value = b;
-      setValue = setB;
-      break;
-    default:
-      break;
+  
+  if (category.startsWith('w')) {
+    const index = parseInt(category.slice(1)) - 1;
+    value = weights[index];
+    setValue = (newValue) => {
+      const newWeights = [...weights];
+      newWeights[index] = newValue;
+      setWeights(newWeights);
+    };
+  } else if (category === 'b') {
+    value = b;
+    setValue = setB;
   }
 
   const change = (delta) => {

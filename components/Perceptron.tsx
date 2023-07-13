@@ -5,36 +5,50 @@ import Card from './Perceptron/Card';
 import Cards from './Perceptron/Cards';
 import useMovies from './Perceptron/useMovies';
 import useTraining from './Perceptron/useTraining';
+import MovieInfo from './Perceptron/movieInfo';
 import { PlayIcon, StopIcon, ArrowPathIcon, ForwardIcon, PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/outline'
 
 export const UpdateContext = createContext();
 
 function Perceptron() {
-  const { movies, setMovies, deleteMovie, addRandomMovie } = useMovies();
-  const { w1, w2, b, setW1, setW2, setB, training, iteration, 
-    tempo, setTempo, tempoValues, handlePlusClick, handleMinusClick, startTraining, stopTraining } = useTraining([0, 0], 0, movies);
+  const { movies, setMovies, deleteMovie, addSmartMovie } = useMovies();
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [activeSlots, setActiveSlots] = useState([1, 1, 1]);
+  const { weights, b, setB, setWeights, training, iteration, 
+    tempo, setTempo, tempoValues, handlePlusClick, handleMinusClick, startTraining, stopTraining } = useTraining([0, 0], 0, movies, setSelectedMovie);
   const [predictedLike, setPredictedLike] = useState(null);
   const [classes, setClasses] = useState(2);
+  const [activeSlots, setActiveSlots] = useState(new Array(classes + 1).fill(1));
+  const [showMovieInfo, setShowMovieInfo] = useState(false);
 
   useEffect(() => {
     if (selectedMovie) {
-      setActiveSlots([selectedMovie.cat1 ? 1 : 0, selectedMovie.cat2 ? 1 : 0, 1]);
+      let newActiveSlots = activeSlots.slice();
+      for (let i = 0; i < classes; i++) {
+        newActiveSlots[i] = selectedMovie['cat' + (i+1)] ? 1 : 0;
+      }
+      newActiveSlots[classes] = 1;  // for bias 'b'
+      setActiveSlots(newActiveSlots);
     } else {
-      setActiveSlots([1, 1, 1]);
+      setActiveSlots(new Array(classes + 1).fill(1));
     }
-  }, [selectedMovie]);
+  }, [selectedMovie, classes]);
 
   useEffect(() => {
     if (selectedMovie) {
-      const activeWeightSum = (selectedMovie.cat1 ? w1 : 0) + (selectedMovie.cat2 ? w2 : 0);
+      const activeWeightSum = weights.reduce((sum, weight, i) => sum + (selectedMovie['cat' + (i+1)] ? weight : 0), 0);
       setPredictedLike(activeWeightSum > b);
     } else {
       setPredictedLike(null);
     }
-  }, [selectedMovie, w1, w2, b]);
+  }, [selectedMovie, weights, b]);
 
+  const openMovieInfo = () => {
+    setShowMovieInfo(true);
+  };
+
+  const closeMovieInfo = () => {
+    setShowMovieInfo(false);
+  };
 
   const likeMovie = (title) => {
     setMovies((prevMovies) =>
@@ -53,26 +67,30 @@ function Perceptron() {
   }
 
   const changeMovieCategory = (title, catNum) => {
-    setMovies((prevMovies) =>
-      prevMovies.map((movie) =>
+    setMovies((prevMovies) => {
+      const updatedMovies = prevMovies.map((movie) =>
         movie.title === title
           ? {
               ...movie,
-              [catNum === 1 ? "cat1" : "cat2"]: movie[catNum === 1 ? "cat1" : "cat2"] ? 0 : 1,
+              ["cat" + catNum]: movie["cat" + catNum] ? 0 : 1,
             }
           : movie
-      )
-    );
-  };
+      );
+      if (selectedMovie && selectedMovie.title === title) {
+        setSelectedMovie(updatedMovies.find(movie => movie.title === title));
+      }
+      return updatedMovies;
+    });
+};
+
   
   const reset = () => {
-    setW1(0);
-    setW2(0);
+    setWeights(new Array(classes).fill(0));
     setB(0);
     setSelectedMovie(null);
-    setActiveSlots([1, 1, 1]);
+    setActiveSlots(new Array(classes + 1).fill(1));
     setPredictedLike(null);
-  };
+};
 
   const faster = () => {
     const currentTempoIndex = tempoValues.indexOf(tempo);
@@ -85,26 +103,33 @@ function Perceptron() {
   }
 
   const classesPlus = (plus) => {
+    let newClasses;
     if (plus) {
-      setClasses(classes => classes < 5 ? classes + 1 : classes);
+      newClasses = classes < 5 ? classes + 1 : classes;
     } else {
-      setClasses(classes => classes > 1 ? classes - 1 : classes);
+      newClasses = classes > 1 ? classes - 1 : classes;
     }
-    console.log(classes)
-}
+    setClasses(newClasses);
+    setWeights(new Array(newClasses).fill(0));
+  };
+  
   
   return (
     <UpdateContext.Provider value={{ 
-      w1, w2, b, setW1, setW2, setB, selectedMovie, setSelectedMovie, predictedLike, movies, 
-      addRandomMovie, handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
+      weights, b, setWeights, setB, selectedMovie, setSelectedMovie,
+      predictedLike, movies, classes, activeSlots,
+      showMovieInfo, openMovieInfo, closeMovieInfo,
+      addSmartMovie, handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
       }}>
+      {showMovieInfo && <MovieInfo movie={selectedMovie} closeMovieInfo={closeMovieInfo} />}
       <div className="flex flex-col sm:flex-row justify-center">
         <div className="flex justify-center items-center mr-12 mt-10 sm:mr-32 relative">
           <Card />
           <Overlay />
-          <Slot category="w1" reversed={undefined} active={activeSlots[0]} />
-          <Slot category="w2" reversed={undefined} active={activeSlots[1]} />
-          <Slot category="b" reversed active={activeSlots[2]} />
+          {weights.map((weight, i) => (
+            <Slot key={"w" + i} category={"w" + (i + 1)} reversed={undefined} active={activeSlots[i]} />
+          ))}
+          <Slot key={"bias"} category="b" reversed active />
         </div>
         <div className="z-30 flex mt-10 sm:mt-0 justify-center">
           <div className="flex-row">

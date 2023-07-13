@@ -3,7 +3,7 @@ import { UpdateContext } from '../Perceptron';
 import { TrashIcon, HandThumbUpIcon, HandThumbDownIcon, PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline'
 
 function Cards() {
-  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, addRandomMovie } = useContext(UpdateContext);
+  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, addSmartMovie } = useContext(UpdateContext);
   const [editing, setEditing ] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [deleting, setDeleting] = useState(null);
@@ -101,13 +101,13 @@ function Cards() {
                 <HandThumbDownIcon className="w-5 h-8 text-gray-500"/>
               )}
               </div>
-              <div className="z-50 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+              <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
                 <PencilSquareIcon
                     className="w-5 h-8 ml-1 text-gray-500"
                     onClick={(e) => handleEditClick(e, movie.title)}
                   />
               </div>
-              <div className="z-50 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+              <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
                 <TrashIcon
                   className="w-5 h-8 ml-1 text-gray-500"
                   onClick={(e) => handleDeleteClick(e, movie.title)}
@@ -118,7 +118,7 @@ function Cards() {
         );
       })}
       </div>
-      <div className={`group relative w-56 my-2 h-8 border-2 rounded-md text-center cursor-pointer bg-gray-100 hover:bg-gray-50`} onClick={addRandomMovie}>
+      <div className={`group relative w-56 my-2 h-8 border-2 rounded-md text-center cursor-pointer bg-gray-100 hover:bg-gray-50`} onClick={addSmartMovie}>
         Neuer Film
       </div>
     </div>
