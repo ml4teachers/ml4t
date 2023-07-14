@@ -11,15 +11,16 @@ import { PlayIcon, StopIcon, ArrowPathIcon, ForwardIcon, PlusCircleIcon, MinusCi
 export const UpdateContext = createContext();
 
 function Perceptron() {
-  const { movies, setMovies, deleteMovie, addSmartMovie } = useMovies();
+  const { movies, setMovies, deleteMovie, addSmartMovie, resetMovies } = useMovies();
   const [selectedMovie, setSelectedMovie] = useState(null);
   const { weights, b, setB, setWeights, training, iteration, 
-    tempo, setTempo, tempoValues, handlePlusClick, handleMinusClick, startTraining, stopTraining } = useTraining([0, 0], 0, movies, setSelectedMovie);
+    tempo, setTempo, tempoValues, handlePlusClick, handleMinusClick, startTraining, stopTraining } = useTraining([0], 0, movies, setSelectedMovie);
   const [predictedLike, setPredictedLike] = useState(null);
-  const [classes, setClasses] = useState(2);
+  const [classes, setClasses] = useState(1);
   const [activeSlots, setActiveSlots] = useState(new Array(classes + 1).fill(1));
   const [showMovieInfo, setShowMovieInfo] = useState(false);
 
+  
   useEffect(() => {
     if (selectedMovie) {
       let newActiveSlots = activeSlots.slice();
@@ -113,17 +114,27 @@ function Perceptron() {
     setWeights(new Array(newClasses).fill(0));
   };
   
+  const removeLastMovie = () => {
+    setMovies((prevMovies) => {
+      let newMovies = [...prevMovies];
+      newMovies.pop();
+      return newMovies;
+    });
+  };
+
+  
   
   return (
     <UpdateContext.Provider value={{ 
       weights, b, setWeights, setB, selectedMovie, setSelectedMovie,
       predictedLike, movies, classes, activeSlots,
       showMovieInfo, openMovieInfo, closeMovieInfo,
-      addSmartMovie, handlePlusClick, handleMinusClick, deleteMovie, likeMovie, editMovieTitle, changeMovieCategory,
+      addSmartMovie, handlePlusClick, handleMinusClick, deleteMovie,
+      likeMovie, editMovieTitle, changeMovieCategory
       }}>
       {showMovieInfo && <MovieInfo movie={selectedMovie} closeMovieInfo={closeMovieInfo} />}
-      <div className="flex flex-col sm:flex-row justify-center">
-        <div className="flex justify-center items-center mr-12 mt-10 sm:mr-32 relative">
+      <div className="flex flex-col md:flex-row justify-center">
+        <div className="flex justify-center items-center mt-10 mr-32 mb-8 relative">
           <Card />
           <Overlay />
           {weights.map((weight, i) => (
@@ -133,6 +144,30 @@ function Perceptron() {
         </div>
         <div className="z-30 flex mt-10 sm:mt-0 justify-center">
           <div className="flex-row">
+            <div className="flex my-2">
+              <div className="flex-1 ">
+                Filme({movies.length})
+              </div>
+              <div className="flex">
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={addSmartMovie}
+                  >
+                  <PlusCircleIcon />
+                </button>
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={removeLastMovie}
+                  >
+                  <MinusCircleIcon />
+                </button>
+                <button 
+                  className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
+                  onClick={resetMovies}>
+                  <ArrowPathIcon />
+                </button>
+              </div>
+            </div>
             <div className="flex my-2">
               <div className="flex-1 ">
                 Genres({classes}/5)
@@ -157,7 +192,7 @@ function Perceptron() {
                 </button>
               </div>
             </div>
-            <div className="flex">
+            <div className="flex my-2">
               <div className="flex-1 ">
                Training({iteration}/{tempo})
               </div>

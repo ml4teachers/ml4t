@@ -8,21 +8,5 @@
       "toc": false,
       "pagination": false
     }
-  },
-  "tools": {
-    "title": "Tools",
-    "type": "page"
-  },
-  "teach": {
-    "title": "Unterricht",
-    "type": "page"
-  },
-  "glossary": {
-    "title": "Begriffe",
-    "type": "page"
-  },
-  "links": {
-    "title": "Ressourcen",
-    "type": "page"
   }
 }

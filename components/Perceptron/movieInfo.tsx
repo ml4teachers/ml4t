@@ -22,7 +22,7 @@ function MovieInfo({ movie, closeMovieInfo }) {
 
   return (
     <div onClick={closeMovieInfo} className="fixed z-50 inset-0 px-24 flex items-center justify-center bg-black bg-opacity-40">
-      <div onClick={(e) => e.stopPropagation()} className={`p-4 border-2 border-gray-400 rounded-lg shadow-lg ${colorClass}`}>
+      <div onClick={(e) => e.stopPropagation()} className={`p-4 border-2 border-gray-400 lg:w-2/3 rounded-lg shadow-lg ${colorClass}`}>
         <div className="flex">
             <h2 className="text-2xl mb-2 flex-1">{movie.title}</h2>
             <XCircleIcon className="w-6 h-6 text-gray-500 cursor-pointer flex-2" onClick={closeMovieInfo}/>

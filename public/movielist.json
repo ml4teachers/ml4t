@@ -12,7 +12,8 @@
         "genres": [
             "Science Fiction",
             "Adventure",
-            "Action"
+            "Action",
+            "Comedy"
         ]
     },
     {
@@ -108,22 +109,6 @@
             "Mystery",
             "Thriller",
             "Action"
-        ]
-    },
-    {
-        "id": 1130818,
-        "title": "Sheroes",
-        "release": "2023-06-23",
-        "language": "en",
-        "poster": "https://www.themoviedb.org/t/p/w1280/itUAkQmihFmRxMYTa3AkvIzMCV4.jpg",
-        "popularity": 1426.462,
-        "vote_average": 4.9,
-        "vote_count": 28,
-        "summary": "",
-        "genres": [
-            "Action",
-            "Comedy",
-            "Crime"
         ]
     },
     {

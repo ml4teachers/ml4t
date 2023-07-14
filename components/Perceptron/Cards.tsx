@@ -118,9 +118,6 @@ function Cards() {
         );
       })}
       </div>
-      <div className={`group relative w-56 my-2 h-8 border-2 rounded-md text-center cursor-pointer bg-gray-100 hover:bg-gray-50`} onClick={addSmartMovie}>
-        Neuer Film
-      </div>
     </div>
 
   );

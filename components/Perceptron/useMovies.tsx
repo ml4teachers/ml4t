@@ -5,11 +5,14 @@ function useMovies() {
   const [allMovies, setAllMovies] = useState([]);
 
   useEffect(() => {
+    fetchAndSetMovies();
+  }, []);
+
+  function fetchAndSetMovies() {
     fetch('/movielist.json')  
       .then(response => response.json())
       .then(data => {
-        // Map through the data and reformat each movie
-        const reformattedData = data.map((movie) => ({
+        const reformattedData = data.filter(movie => movie.summary).map((movie) => ({
           id: movie.id,
           title: movie.title,
           poster: movie.poster,
@@ -21,58 +24,70 @@ function useMovies() {
           cat4: movie.genres.includes("Horror") ? 1 : 0,
           cat5: movie.genres.includes("Family") ? 1 : 0,
           like: movie.vote_average > 7 ? 1 : 0,
-          popularity: movie.popularity,
+          popularity: movie.vote_count,
         }));
-
+  
         setAllMovies(reformattedData);
-        const smartSelection = getSmartSelection(reformattedData, 4);
-        setMovies(smartSelection);
+        const firstSelection = getFirstSelection(reformattedData);
+        const remainingMovies = reformattedData.filter(movie => movie.id !== firstSelection.id);
+        const secondSelection = getFirstSelection(remainingMovies);
+        setMovies([firstSelection, secondSelection]);
       })
       .catch(error => console.error('Error:', error));
-  }, []);
+  }
 
+  //...
+
+  const resetMovies = () => {
+    fetchAndSetMovies();
+  };
+  
+  function getFirstSelection(array) {
+    const weights = array.map(movie => movie.popularity);
+    const index = weightedRandomIndex(weights);
+    return array[index];
+  }
+  
   function getSmartSelection(array, count) {
     const tempArray = [...array];
     const result = [];
-  
-    const desiredCombinations = [
-      { cat1: 0, cat2: 0 },
-      { cat1: 0, cat2: 1 },
-      { cat1: 1, cat2: 0 },
-      { cat1: 1, cat2: 1 }
-    ];
-  
-    for (let i = 0; i < desiredCombinations.length; i++) {
-      const moviesWithDesiredCombination = tempArray.filter(movie =>
-        movie.cat1 === desiredCombinations[i].cat1 && movie.cat2 === desiredCombinations[i].cat2
-      );
-  
-      if (moviesWithDesiredCombination.length > 0) {
-        const weights = moviesWithDesiredCombination.map(movie => movie.popularity);
-        const index = weightedRandomIndex(weights);
-        result.push(moviesWithDesiredCombination[index]);
-        tempArray.splice(tempArray.findIndex(movie => movie.id === moviesWithDesiredCombination[index].id), 1);
+    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    
+    for (let i = 0; i < genreCategories.length; i++) {
+      let moviesWithGenre = tempArray.filter(movie => movie[genreCategories[i]] === 1 && !hasGenreOverlap(movie, result));
+      if (moviesWithGenre.length > 0) {
+        const index = Math.floor(Math.random() * moviesWithGenre.length);
+        result.push(moviesWithGenre[index]);
+        tempArray.splice(tempArray.findIndex(movie => movie.id === moviesWithGenre[index].id), 1);
+      }
+      let moviesWithoutGenre = tempArray.filter(movie => movie[genreCategories[i]] === 0 && !hasGenreOverlap(movie, result));
+      if (moviesWithoutGenre.length > 0) {
+        const index = Math.floor(Math.random() * moviesWithoutGenre.length);
+        result.push(moviesWithoutGenre[index]);
+        tempArray.splice(tempArray.findIndex(movie => movie.id === moviesWithoutGenre[index].id), 1);
       }
     }
-  
+    
     while (result.length < count && tempArray.length > 0) {
       const weights = tempArray.map(movie => movie.popularity);
       const index = weightedRandomIndex(weights);
-  
+    
       if (!hasGenreOverlap(tempArray[index], result)) {
         result.push(tempArray[index]);
         tempArray.splice(index, 1);
       } else {
-        // If all genre configurations are already covered, add a movie randomly
         tempArray.splice(index, 1);
       }
     }
-    
+      
     return result;
   }
   
-
-
+  
+  function hasGenreOverlap(movie, movies) {
+    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    return movies.some(m => genreCategories.every(category => m[category] === movie[category]));
+  }
 
   function weightedRandomIndex(weights) {
     const totalWeight = weights.reduce((a, b) => a + b, 0);
@@ -87,23 +102,39 @@ function useMovies() {
     }
   }
 
-  function hasGenreOverlap(movie, movies) {
-    return movies.some(m => m.cat1 === movie.cat1 && m.cat2 === movie.cat2 && m.cat3 === movie.cat3 && m.cat4 === movie.cat4 && m.cat5 === movie.cat5);
-  }
-
   const deleteMovie = (title) => {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.title !== title));
+  };
+
+  const isGenreCombinationUnique = (newMovie, movies) => {
+    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    return !movies.some(m => genreCategories.every(category => m[category] === newMovie[category]));
+  };
+
+  const generateUniqueMovie = (remainingMovies, existingMovies) => {
+    for(let movie of remainingMovies){
+      if(isGenreCombinationUnique(movie, existingMovies)){
+        return movie;
+      }
+    }
+    return null;
   };
 
   const addSmartMovie = () => {
     const remainingMovies = allMovies.filter(movie => !movies.find(m => m.id === movie.id));
     if (remainingMovies.length > 0) {
-      const smartMovie = getSmartSelection(remainingMovies, 1)[0];
-      setMovies(prevMovies => [...prevMovies, smartMovie]);
+      const uniqueMovie = generateUniqueMovie(remainingMovies, movies);
+      if (uniqueMovie) {
+        setMovies(prevMovies => [...prevMovies, uniqueMovie]);
+      } else {
+        const smartMovie = getSmartSelection(remainingMovies, 1)[0];
+        setMovies(prevMovies => [...prevMovies, smartMovie]);
+      }
     }
   };
 
-  return { movies, setMovies, deleteMovie, addSmartMovie };
+
+  return { movies, setMovies, deleteMovie, addSmartMovie, resetMovies };
 }
 
 export default useMovies;

@@ -9,7 +9,7 @@ const config: DocsThemeConfig = {
       <link rel="icon" href="/favicon.ico" />
       <title>ML for Teachers</title>
       <meta property="og:title" content="ML for Teachers" />
-      <meta property="og:description" content="KI Tools für den Unterricht" />
+      <meta property="og:description" content="Maschinelles Lernen, Künstliche Intelligenz, Unterricht" />
       <meta property="og:image" content="/og.png" />
     </>
   ),
@@ -24,7 +24,7 @@ const config: DocsThemeConfig = {
     </>
   ),
   project: {
-    link: 'https://github.com/ml4teachers/aitools',
+    link: 'https://github.com/ml4teachers/ml4t',
   },
   footer: {
     text: (
