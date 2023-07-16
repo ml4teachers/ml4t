@@ -56,7 +56,7 @@ function Perceptron() {
   const likeMovie = (title) => {
     setMovies((prevMovies) =>
     prevMovies.map((movie) =>
-      movie.title === title ? { ...movie, like: movie.like ? 0 : 1 } : movie
+      movie.title === title ? { ...movie, like: movie.like ? 0 : 1, rated: movie.rated = 1 } : movie
     )
   );
   }
@@ -86,6 +86,10 @@ function Perceptron() {
     });
 };
 
+  const resetMoviesClick = () => {
+    resetMovies();
+    setSelectedMovie(null);
+  }
   
   const reset = () => {
     setWeights(new Array(classes).fill(0));
@@ -93,6 +97,7 @@ function Perceptron() {
     setSelectedMovie(null);
     setActiveSlots(new Array(classes + 1).fill(1));
     setPredictedLike(null);
+    setSelectedMovie(null);
 };
 
   const faster = () => {
@@ -166,7 +171,7 @@ function Perceptron() {
                 </button>
                 <button 
                   className="w-6 p-0.5 text-gray-500 rounded-md text-center cursor-pointer"
-                  onClick={resetMovies}>
+                  onClick={resetMoviesClick}>
                   <ArrowPathIcon />
                 </button>
               </div>

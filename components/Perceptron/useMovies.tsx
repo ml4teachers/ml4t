@@ -23,8 +23,9 @@ function useMovies() {
           cat3: movie.genres.includes("Drama") ? 1 : 0,
           cat4: movie.genres.includes("Horror") ? 1 : 0,
           cat5: movie.genres.includes("Family") ? 1 : 0,
-          like: movie.vote_average > 7 ? 1 : 0,
+          like: 0,
           popularity: movie.vote_count,
+          rated: false
         }));
   
         setAllMovies(reformattedData);

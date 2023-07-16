@@ -35,7 +35,7 @@ function Cards() {
     e.stopPropagation();
     likeMovie(title);
     setSelectedMovie(null);
-  }
+  }  
 
   const handleEditClick = (e, title) => {
     e.stopPropagation();
@@ -61,13 +61,14 @@ function Cards() {
     <div className="z-30 flex flex-col justify-center relative text-sm leading-7">
       <div className="overflow-auto h-64">
       {movies.map(movie => {
-        const colorClass = movie.like ? 'bg-blue-100' : 'bg-orange-100';
+        const colorClass = !movie.rated ? 'bg-gray-100' : movie.like ? 'bg-blue-100' : 'bg-orange-100';
+        const borderColor = !movie.rated ? 'border-gray-400' : movie.like ? 'border-blue-300' : 'border-orange-300';
         const isEditing = editing === movie.title;
 
         return (
           <div 
             key={movie.title} 
-            className={`group hover:pr-16 relative w-56 my-3 h-8 border-2 ${selectedMovie?.title === movie.title ? 'border-gray-400' : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
+            className={`group hover:pr-16 relative w-56 my-3 h-8 border-2 ${selectedMovie?.title === movie.title ? borderColor : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
             onClick={() => handleCardClick(movie)}
           >
             {isEditing ? (
@@ -92,7 +93,7 @@ function Cards() {
                 >
                 {isEditing ? (
                 <CheckIcon className="w-5 h-8 text-gray-500 bg-white"/>
-              ) : movie.like ? (
+              ) : (movie.like || !movie.rated) ? (
                 <HandThumbUpIcon className="w-5 h-8 text-gray-500"/>
               ) : (
                 <HandThumbDownIcon className="w-5 h-8 text-gray-500"/>

@@ -49,11 +49,17 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
     setTraining(true);
     let iterationCount = 0;
 
+    const ratedMovies = movies.filter(movie => movie.rated);
+    if (ratedMovies.length === 0) {
+      setTraining(false);
+      return;
+    }
+
     let movieIndex = 0; // Set a tracker
 
     trainingIntervalRef.current = setInterval(() => {
       iterationCount++;
-      
+
       if (iterationCount > tempo) {
         clearInterval(trainingIntervalRef.current);
         trainingIntervalRef.current = null;
@@ -61,8 +67,16 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
         setSelectedMovie(false);
       } else {
         setIteration(iterationCount);
-        const movie = movies[movieIndex];
 
+        // Skip any movies that aren't rated
+        while (!movies[movieIndex].rated) {
+          movieIndex++;
+          if (movieIndex >= movies.length) {
+            movieIndex = 0;
+          }
+        }
+
+        const movie = movies[movieIndex];
         setSelectedMovie(movie);
 
         const activeWeightSum = weightsRef.current.reduce((sum, weight, i) => sum + (movie['cat' + (i+1)] ? weight : 0), 0);
@@ -80,7 +94,6 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
         }
       }
     }, 5000 / tempo);
-
   };
 
   return { 

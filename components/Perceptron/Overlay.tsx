@@ -6,6 +6,7 @@ import { genres } from "../data/genres.js";
 function Overlay() {
   const { selectedMovie, handlePlusClick, handleMinusClick, predictedLike, classes } = useContext(UpdateContext);
   const [activeSlots, setActiveSlots] = useState(new Array(classes + 1).fill(1));
+  const borderColor = !selectedMovie ? 'border-gray-300' : predictedLike ? 'border-blue-300' : 'border-orange-300';
 
   useEffect(() => {
     if (selectedMovie) {
@@ -23,7 +24,7 @@ function Overlay() {
   const overlayWidth = 4 * classes + 10;
 
   return (
-      <div className="z-10 absolute ml-24 h-24 border-2 border-gray-300 rounded-md" style={{ width: `${overlayWidth}rem` }}>
+      <div className={`z-10 absolute ml-24 h-24 border-2 ${borderColor} rounded-md`} style={{ width: `${overlayWidth}rem` }}>
         <div className="relative h-full">
           <div className="absolute z-20 right-0 bg-gradient-to-r from-white to-blue-200 w-24 h-12 rounded-t-sm">
             <div className="absolute top-2 left-1">

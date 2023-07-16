@@ -35,12 +35,13 @@ function Card() {
   };
 
 
-  const colorClass = selectedMovie.like ? 'bg-blue-100' : 'bg-orange-100';
+  const colorClass = !selectedMovie.rated ? 'bg-gray-100' : selectedMovie.like ? 'bg-blue-100' : 'bg-orange-100';
+  const borderColor = !selectedMovie.rated ? 'border-gray-400' : selectedMovie.like ? 'border-blue-300' : 'border-orange-300';
 
   const cardWidth = 4 * classes + 1;
 
   return (
-    <div className={`z-30 absolute mr-12 h-24 border-2 border-gray-400 rounded-md`} style={{ width: `${cardWidth}rem` }}>
+    <div className={`z-30 absolute mr-12 h-24 border-2 ${borderColor} rounded-md`} style={{ width: `${cardWidth}rem` }}>
       <div className="relative h-full">
         <div className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass} cursor-pointer`} onClick={() => setSelectedMovie(null)}>
           <div className="text-center text-sm mt-2 pr-7 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
@@ -63,12 +64,12 @@ function Card() {
           }
           </div>
         </div>
-        <div className={`absolute top-7 right-0 w-[30px] h-9 ${colorClass} rounded-sm text-2xl leading-8 text-center text-gray-600`}>{`>`}</div>
+        <div className={`absolute top-7 right-0 w-[30px] h-9 ${colorClass} text-2xl leading-8 text-center text-gray-600`}>{`>`}</div>
         {
           Array.from({ length: classes-1 }, (_, i) => (
               <div 
                 key={i}
-                className={`absolute top-7 w-[31px] h-9 ${colorClass} rounded-sm text-2xl leading-8 text-center text-gray-600`}
+                className={`absolute top-7 w-[31px] h-9 ${colorClass} text-2xl leading-8 text-center text-gray-600`}
                 style={{ right: `${3.9 + 4 * i}rem` }}
               >+</div>
           ))
