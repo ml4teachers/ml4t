@@ -19,6 +19,8 @@ function Perceptron() {
   const [classes, setClasses] = useState(1);
   const [activeSlots, setActiveSlots] = useState(new Array(classes + 1).fill(1));
   const [showMovieInfo, setShowMovieInfo] = useState(false);
+  const [editing, setEditing] = useState(null);
+
 
   
   useEffect(() => {
@@ -128,7 +130,8 @@ function Perceptron() {
     <UpdateContext.Provider value={{ 
       weights, b, setWeights, setB, selectedMovie, setSelectedMovie,
       predictedLike, movies, classes, activeSlots,
-      showMovieInfo, openMovieInfo, closeMovieInfo,
+      showMovieInfo, editing, setEditing,
+      openMovieInfo, closeMovieInfo,
       addSmartMovie, handlePlusClick, handleMinusClick, deleteMovie,
       likeMovie, editMovieTitle, changeMovieCategory
       }}>

@@ -8,5 +8,16 @@
       "toc": false,
       "pagination": false
     }
+  },
+  "print": {
+    "title": "Unterrichtsmaterial",
+    "type": "page",
+    "theme": {
+      "breadcrumb": false,
+      "footer": false,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false
+    }
   }
 }

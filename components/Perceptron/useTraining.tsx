@@ -5,8 +5,8 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
   const [b, setB] = useState(initialBias);
   const [iteration, setIteration] = useState(0);
   const [training, setTraining] = useState(false);
-  const [tempo, setTempo] = useState(10);
-  const tempoValues = [10, 20, 50, 100, 500];
+  const [tempo, setTempo] = useState(5);
+  const tempoValues = [5, 10, 20, 50, 100, 500];
   const trainingIntervalRef = useRef(null);
 
   const weightsRef = useRef(weights);
@@ -49,17 +49,22 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
     setTraining(true);
     let iterationCount = 0;
 
+    let movieIndex = 0; // Set a tracker
+
     trainingIntervalRef.current = setInterval(() => {
       iterationCount++;
-      setIteration(iterationCount);
-      if (iterationCount > tempo-1) {
+      
+      if (iterationCount > tempo) {
         clearInterval(trainingIntervalRef.current);
         trainingIntervalRef.current = null;
         setTraining(false);
         setSelectedMovie(false);
       } else {
-        const movie = movies[Math.floor(Math.random() * movies.length)];
+        setIteration(iterationCount);
+        const movie = movies[movieIndex];
+
         setSelectedMovie(movie);
+
         const activeWeightSum = weightsRef.current.reduce((sum, weight, i) => sum + (movie['cat' + (i+1)] ? weight : 0), 0);
         const predictedLike = activeWeightSum > bRef.current ? 1 : 0;
 
@@ -67,9 +72,15 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
           handlePlusClick([...Array(weights.length)].map((_, i) => movie['cat' + (i+1)] ? 1 : 0).concat(1));
         } else if (movie.like < predictedLike) {
           handleMinusClick([...Array(weights.length)].map((_, i) => movie['cat' + (i+1)] ? 1 : 0).concat(1));
-        }        
+        }
+        
+        movieIndex++;
+        if (movieIndex >= movies.length) {
+          movieIndex = 0;
+        }
       }
-    }, 5000/tempo);
+    }, 5000 / tempo);
+
   };
 
   return { 

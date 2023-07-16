@@ -47,7 +47,10 @@ const config: DocsThemeConfig = {
     title: null,
   },
   gitTimestamp: GermanGitTimestamp,
-
+  darkMode: false,
+  nextThemes: {
+    forcedTheme:"light"
+  }
 }
 
 export default config

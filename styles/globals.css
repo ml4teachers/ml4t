@@ -6,4 +6,9 @@
     max-width: 30px;
     height: auto;
   }
-  
+
+@media print {
+  .page-break {
+    page-break-after: always;
+  }
+}

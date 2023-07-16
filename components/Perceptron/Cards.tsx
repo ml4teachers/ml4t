@@ -3,11 +3,8 @@ import { UpdateContext } from '../Perceptron';
 import { TrashIcon, HandThumbUpIcon, HandThumbDownIcon, PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline'
 
 function Cards() {
-  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, addSmartMovie } = useContext(UpdateContext);
-  const [editing, setEditing ] = useState(null);
+  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, editing, setEditing } = useContext(UpdateContext);
   const [editTitle, setEditTitle] = useState('');
-  const [deleting, setDeleting] = useState(null);
-
 
   const handleCardClick = (movie) => {
     if (editing !== null) return;
@@ -56,7 +53,7 @@ function Cards() {
 
   const handleInputBlur = () => {
     editMovieTitle(editing, editTitle);
-    setEditing(null);
+    setTimeout(() => setEditing(null), 100);
   }
 
   return (

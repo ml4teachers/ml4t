@@ -36,7 +36,39 @@ function useMovies() {
       .catch(error => console.error('Error:', error));
   }
 
-  //...
+  function generateCards(classes, numberOfSets) {
+    const combinations = [];
+    let movies = [...allMovies];
+    for (let i = 0; i < Math.pow(2, classes); i++) {
+      const combination = i.toString(2).padStart(classes, '0').split('').map(Number);
+      combinations.push(combination);
+    }
+
+    let allSelectedMovies = [];
+  
+    for (let set = 0; set < numberOfSets; set++) {
+      let selectedMovies = combinations.map(combination => {
+        for (let i = 0; i < movies.length; i++) {
+          const movie = movies[i];
+          if (combination.every((value, index) => movie['cat' + (index + 1)] === value)) {
+            // Entfernen des ausgewählten Films aus der Filmeliste
+            movies = movies.filter((_, index) => index !== i);
+            return movie;
+          }
+        }
+      });
+
+      // Filtern der undefinierten Filme aus selectedMovies
+      selectedMovies = selectedMovies.filter(movie => movie !== undefined);
+      allSelectedMovies.push(selectedMovies);
+    }
+  
+    return allSelectedMovies;
+  }
+
+
+
+  
 
   const resetMovies = () => {
     fetchAndSetMovies();
@@ -134,7 +166,7 @@ function useMovies() {
   };
 
 
-  return { movies, setMovies, deleteMovie, addSmartMovie, resetMovies };
+  return { movies, setMovies, deleteMovie, addSmartMovie, resetMovies, generateCards };
 }
 
 export default useMovies;

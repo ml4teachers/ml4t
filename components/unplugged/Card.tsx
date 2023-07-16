@@ -1,13 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import { UpdateContext } from '../Perceptron';
+import { useState, useEffect } from 'react';
 import { genres } from "../data/genres.js";
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
-
-function Card() {
-  const { selectedMovie, setSelectedMovie, changeMovieCategory, classes, openMovieInfo, editing, setEditing } = useContext(UpdateContext);
+const Card = ({ selectedMovie, classes }) => {
+  const colorClass = 'white';
+  const cardWidth = 4 * classes + 1;
   const [movieCategories, setMovieCategories] = useState(new Array(classes).fill(false));
-  
 
   useEffect(() => {
     if (selectedMovie) {
@@ -19,35 +16,18 @@ function Card() {
     }
   }, [selectedMovie, classes]);
 
+
   if (!selectedMovie) return null;
 
-  const handleCategoryClick = (index) => {
-    index = classes - index;
-    const newMovieCategories = [...movieCategories];
-    newMovieCategories[index] = !newMovieCategories[index];
-    setMovieCategories(newMovieCategories);
-    changeMovieCategory(selectedMovie.title, index);
-  };
-
-
-  const showMovieInfo = () => {
-    openMovieInfo(true);
-  };
-
-
-  const colorClass = selectedMovie.like ? 'bg-blue-100' : 'bg-orange-100';
-
-  const cardWidth = 4 * classes + 1;
 
   return (
-    <div className={`z-30 absolute mr-12 h-24 border-2 border-gray-400 rounded-md`} style={{ width: `${cardWidth}rem` }}>
+    <div className={`z-30 h-24 border bg-gray-100 border-gray-400`} style={{ width: `${cardWidth}rem` }}>
       <div className="relative h-full">
-        <div className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass} cursor-pointer`} onClick={() => setSelectedMovie(null)}>
-          <div className="text-center text-sm mt-2 pr-7 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
+        <div className={`absolute top-0 left-0 w-full h-[30px] ${colorClass}`}>
+          <div className="text-center text-xs mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
         </div>
-        <InformationCircleIcon className="z-40 absolute w-6 right-1 pt-1 text-gray-400 hover:text-gray-600 cursor-pointer" onClick={showMovieInfo}/>
         <div className={`absolute top-6 left-0 w-[14px] h-10 ${colorClass}`}></div>
-        <div className={`absolute flex bottom-0 left-0 w-full h-[30px] rounded-b-md ${colorClass}`}>
+        <div className={`absolute flex bottom-0 left-0 w-full h-[30px] ${colorClass}`}>
           <div className="absolute flex">
           {
             movieCategories.map((isActive, index) => (
@@ -55,15 +35,24 @@ function Card() {
                 key={index} 
                 className={`w-16 text-xs text-center mt-1 ${isActive ? '' : 'line-through text-gray-400'}`}
               >
-                <div className={`${editing ? 'bg-white bg-opacity-70' : ''}`}>
-                  {genres[index]}
-                </div>
+                {genres[index]}
               </div>
             ))
           }
           </div>
         </div>
         <div className={`absolute top-7 right-0 w-[30px] h-9 ${colorClass} rounded-sm text-2xl leading-8 text-center text-gray-600`}>{`>`}</div>
+        {
+          movieCategories.map((isActive, index) => (
+            <div 
+              key={index} 
+              className={`${isActive ? 'h-8 mt-[30px] w-8 border bg-white border-gray-400 absolute' : ''}`}
+              style={{ right: `${(classes-1) * 4 + 1.9 - 4 * index}rem` }}
+            >
+            </div>
+          ))
+        }
+ 
         {
           Array.from({ length: classes-1 }, (_, i) => (
               <div 
@@ -74,16 +63,9 @@ function Card() {
           ))
         }
         {
-          Array.from({ length: classes }, (_, i) => (
-              <div key={i} className={`z-40 absolute top-7 w-8 h-16 cursor-pointer`} onClick={() => handleCategoryClick(i)}
-              style={{ right: `${1.9 + 4 * i}rem` }}></div>
-          ))
-        }
-        {
           Array.from({ length: classes }, (_, i) => {
             const isActive = movieCategories[classes - i - 1];
             const className = isActive ? '' : colorClass;
-
             return (
               <div 
                 key={i}
