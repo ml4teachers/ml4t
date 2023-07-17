@@ -24,7 +24,7 @@ const Card = ({ selectedMovie, classes }) => {
     <div className={`z-30 h-24 border bg-gray-100 border-gray-400`} style={{ width: `${cardWidth}rem` }}>
       <div className="relative h-full">
         <div className={`absolute top-0 left-0 w-full h-[30px] ${colorClass}`}>
-          <div className="text-center text-xs mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
+          <div className="text-center text-xs mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{(classes > 1) ? selectedMovie.title : ''}</div>
         </div>
         <div className={`absolute top-6 left-0 w-[14px] h-10 ${colorClass}`}></div>
         <div className={`absolute flex bottom-0 left-0 w-full h-[30px] ${colorClass}`}>

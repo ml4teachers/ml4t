@@ -65,7 +65,7 @@ function Unplugged() {
         </form>
       </div>}
       <div className="flex flex-wrap w-[600px]">
-        <div className={`flex flex-wrap ${perceptrons > 4 ? 'break-after-page' : ''}`}>
+        <div className={`flex flex-wrap ${((perceptrons + cards)*slots > 8 ) ? 'break-after-page' : ''}`}>
             {allSelectedMovies.map((selectedMovies, k) => 
               selectedMovies.length > 0 && selectedMovies.map((movie, i) => 
                 <Card key={`${k}-${i}`} selectedMovie={movie} classes={slots} />
