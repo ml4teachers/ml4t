@@ -22,16 +22,16 @@ export default function useTraining(initialWeights, initialBias, movies, setSele
 
   const handlePlusClick = (activeSlots = Array(weights.length).fill(1)) => {
     setWeights(prevWeights => prevWeights.map((weight, i) => 
-      (activeSlots[i] && weight < 5) ? weight + 1 : weight));
-    if (activeSlots[weights.length] && b > -5) {
+      (activeSlots[i] && weight < 4) ? weight + 1 : weight));
+    if (activeSlots[weights.length] && b > -4) {
       setB(prevB => prevB - 1);
     }
   }
 
   const handleMinusClick = (activeSlots = Array(weights.length).fill(1)) => {
     setWeights(prevWeights => prevWeights.map((weight, i) => 
-      (activeSlots[i] && weight > -5) ? weight - 1 : weight));
-    if (activeSlots[weights.length] && b < 5) {
+      (activeSlots[i] && weight > -4) ? weight - 1 : weight));
+    if (activeSlots[weights.length] && b < 4) {
       setB(prevB => prevB + 1);
     }
   }

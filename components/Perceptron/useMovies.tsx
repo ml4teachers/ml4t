@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function useMovies() {
+function useMovies(initialCount, maxCount) {
   const [movies, setMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
 
@@ -23,16 +23,23 @@ function useMovies() {
           cat3: movie.genres.includes("Drama") ? 1 : 0,
           cat4: movie.genres.includes("Horror") ? 1 : 0,
           cat5: movie.genres.includes("Family") ? 1 : 0,
+          cat6: movie.genres.includes("Documentary") ? 1 : 0,
+          cat7: movie.genres.includes("Music") ? 1 : 0,
+          cat8: movie.genres.includes("Adventure") ? 1 : 0,
+          cat9: movie.genres.includes("Thriller") ? 1 : 0,
           like: 0,
           popularity: movie.vote_count,
           rated: false
         }));
   
         setAllMovies(reformattedData);
-        const firstSelection = getFirstSelection(reformattedData);
-        const remainingMovies = reformattedData.filter(movie => movie.id !== firstSelection.id);
-        const secondSelection = getFirstSelection(remainingMovies);
-        setMovies([firstSelection, secondSelection]);
+        const initialMovies = [];
+        for(let i = 0; i < initialCount; i++){
+          const movie = getFirstSelection(reformattedData);
+          initialMovies.push(movie);
+          reformattedData.splice(reformattedData.findIndex(m => m.id === movie.id), 1);
+        }
+        setMovies(initialMovies);
       })
       .catch(error => console.error('Error:', error));
   }
@@ -118,7 +125,7 @@ function useMovies() {
   
   
   function hasGenreOverlap(movie, movies) {
-    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9'];
     return movies.some(m => genreCategories.every(category => m[category] === movie[category]));
   }
 
@@ -140,7 +147,7 @@ function useMovies() {
   };
 
   const isGenreCombinationUnique = (newMovie, movies) => {
-    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
+    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9'];
     return !movies.some(m => genreCategories.every(category => m[category] === newMovie[category]));
   };
 
@@ -154,14 +161,16 @@ function useMovies() {
   };
 
   const addSmartMovie = () => {
-    const remainingMovies = allMovies.filter(movie => !movies.find(m => m.id === movie.id));
-    if (remainingMovies.length > 0) {
-      const uniqueMovie = generateUniqueMovie(remainingMovies, movies);
-      if (uniqueMovie) {
-        setMovies(prevMovies => [...prevMovies, uniqueMovie]);
-      } else {
-        const smartMovie = getSmartSelection(remainingMovies, 1)[0];
-        setMovies(prevMovies => [...prevMovies, smartMovie]);
+    if (movies.length < maxCount) {
+      const remainingMovies = allMovies.filter(movie => !movies.find(m => m.id === movie.id));
+      if (remainingMovies.length > 0) {
+        const uniqueMovie = generateUniqueMovie(remainingMovies, movies);
+        if (uniqueMovie) {
+          setMovies(prevMovies => [...prevMovies, uniqueMovie]);
+        } else {
+          const smartMovie = getSmartSelection(remainingMovies, 1)[0];
+          setMovies(prevMovies => [...prevMovies, smartMovie]);
+        }
       }
     }
   };

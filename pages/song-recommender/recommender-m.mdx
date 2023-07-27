@@ -1,0 +1,27 @@
+import Link from "next/link";
+
+
+<div className="mt-16 flex justify-center">
+    <div className="flex justify-center">
+        <div className="flex flex-col">
+            <div className="flex text-gray-900 text-4xl font-bold">Song Recommender</div>
+            <div className="flex mt-8 max-w-lg justify-center">
+                <iframe style={{borderRadius: "12px"}} src="https://open.spotify.com/embed/playlist/2Sit1z0GjzT8cezFpcQuPQ?utm_source=generator" width="500" height="470" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+            </div>
+            <div className="flex justify-center">
+                <Link href="/song-recommender">
+                    <button className="flex hover:shadow-none hover:bg-[#0C1C37] mx-4 w-44 h-10 p-2 bg-[#0F2345] text-white justify-center rounded-lg shadow-lg mt-8">
+                        <div className="flex">zurück</div>
+                    </button>
+                </Link>
+                <Link href="/song-recommender/summary">
+                    <button className="flex hover:shadow-none hover:bg-[#0C1C37] mx-4 w-44 h-10 p-2 bg-[#0F2345] text-white justify-center rounded-lg shadow-lg mt-8">
+                        <div className="flex">
+                        <div className="flex">Zusammenfassung</div>
+                        </div>
+                    </button>
+                </Link>
+            </div>
+        </div>
+    </div>
+</div>

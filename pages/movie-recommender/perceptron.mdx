@@ -1,0 +1,45 @@
+import Perceptron from '/components/MovieRecommender/Perceptron'
+
+# Perzeptron
+
+<div className="flex">
+<div className="mr-4">
+
+Der Begriff Perzeptron wurde vom amerikanischen Psychologen und Informatiker [Frank Rosenblatt](https://de.wikipedia.org/wiki/Frank_Rosenblatt) eingeführt. Er kombinierte die Worte **perception** (engl. Wahrnehmung) und **Neuron**. Rosenblatts Ziel war die Entwicklung einer Maschine, die ähnlich unserem Gehirn Eingabedaten mittels neuronaler Verbindungen ohne explizite Anweisungen klassifiziert. Eine frühe Version des Perzeptrons wurde beispielsweise darauf trainiert, mithilfe von Fotozellen Bilder von Männern und Frauen den jeweiligen Kategorien zuzuordnen (siehe Video).
+</div>
+<iframe width="256" height="200" src="https://www.youtube.com/embed/cNxadbrN_aI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
+## Biologisches Neuron
+<div className="flex md:flex-col">
+<div className="mr-4 w-72">
+    <img src="/neuron.gif" alt="Neuron" />
+    <div className="text-xs px-4">
+Nervenzelle, die elektrische Signale weiterleitet
+</div>
+</div>
+<div className="flex-1">
+
+Künstliche Neuronen, wie das Perzeptron, sind von der Funktionsweise biologischer Nervenzellen (Neuronen) inspiriert. Diese spezialisieren sich auf die **Aufnahme und Verarbeitung von Signalen**. Die Dendriten einer Nervenzelle leiten eingehende elektrische Erregungen zum Zellkörper. Überschreitet diese Erregung einen bestimmten **Schwellenwert**, wird eine Spannung über das Axon abgegeben (siehe Abb. links). An den Axonenden werden die Signale dann chemisch oder elektrisch über Synapsen an die Dendriten der nächsten Nervenzelle weitergegeben.
+
+</div>
+</div>
+
+## Interaktives Perzeptron
+<div className="flex">
+<div>
+
+Unser Perzeptron besitzt nur drei **Eingaben**. Jede Eingabe repräsentiert eine Kategorie, in unserem Fall ein Genre. Da unsere Eingaben nur zwei Zustände einnehmen können, repräsentieren wir die **Merkmale** eines Films durch die **Aktivierung einer Eingabe**.
+
+Das abgebildete Perzeptron wurde darauf trainiert, anzugeben, ob eine Person einen Film mag (Like) oder nicht (Dislike). Der Wert in der Mitte ist die **gewichtete Summe** der Eingaben. Er repräsentiert die "Spannung" des Perzeptrons. Ähnlich wie bei biologischen Nervenzellen, wird die Spannung beim Perzeptron erst weitergegeben, wenn ein Schwellenwert erreicht ist. Durch Klicken auf die Eingabeneuronen können diese aktiviert oder deaktiviert werden.
+
+</div>
+<Perceptron />
+</div>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A4 – Welche Art von Filmen bevorzugt die Person, für die das Perzeptron trainiert wurde?</summary>
+Sie bevorzugt Action-Komödien, sofern sie keine Horror-Elemente enthalten.
+</details>
+
+Die blauen und orangen Verbindungen von den Eingabeneuronen zur Summe sind gewichtet. Das bedeutet, sie werden mit einem festgelegten Wert (dem Gewicht) multipliziert. Doch wie ändert sich die Ausgabe des Perzeptrons, wenn wir diese Gewichte verändern?

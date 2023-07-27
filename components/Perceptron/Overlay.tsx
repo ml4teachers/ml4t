@@ -30,9 +30,9 @@ function Overlay() {
             <div className="absolute top-2 left-1">
               {selectedMovie && predictedLike ? 'Like' : ''}
             </div>
-            <div className="absolute z-20 top-2 right-2 w-6 h-6 bg-blue-300 rounded-full text-2xl border border-gray-400 text-white leading-4 text-center cursor-pointer" onClick={() => handlePlusClick(activeSlots)}>+</div>
+            <div title="Aktive Parameter so verändern, dass der Film besser bewertet wird." className="absolute z-20 top-2 right-2 w-6 h-6 bg-blue-300 rounded-full text-2xl border border-gray-400 text-white leading-4 text-center cursor-pointer" onClick={() => handlePlusClick(activeSlots)}>+</div>
           </div>
-          <div className="absolute bottom-0 z-20 right-0 bg-gradient-to-r from-white to-orange-200 w-24 h-12 rounded-b-sm">
+          <div title="Aktive Parameter so verändern, dass der Film schlechter bewertet wird." className="absolute bottom-0 z-20 right-0 bg-gradient-to-r from-white to-orange-200 w-24 h-12 rounded-b-sm">
             <div className="absolute top-3 left-1">
               {selectedMovie && !predictedLike ? 'Dislike' : ''}
             </div>

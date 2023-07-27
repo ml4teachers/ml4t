@@ -1,0 +1,27 @@
+{
+  "features": {
+    "title": "Merkmale"
+  },
+  "perceptron": {
+    "title": "Perzeptron"
+  },
+  "parameters": {
+    "title": "Parameter"
+  },
+  "experimenting": {
+    "title": "Experimentieren"
+  },
+  "manual-training": {
+    "title": "Manuelles Training"
+  },
+  "machine-learning": {
+    "title": "Maschinelles Lernen"
+  },
+  "sandbox": {
+    "title": "Movie Recommender",
+    "theme": {
+      "sidebar": false,
+      "pagination": true
+    }
+  }
+}

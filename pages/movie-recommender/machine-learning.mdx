@@ -1,0 +1,49 @@
+import Perceptron from '/components/Perceptron'
+
+<div className="z-10 relative">
+
+# Maschinelles Lernen
+
+In dieser Übung wenden wir eine einfache Form des **überwachten Lernens** an. Die Methode heisst so, weil wir als menschliche Überwacher die Ein- als auch Ausgaben während dem Trainingsprozess zur Verfügung stellen. Mit Hilfe eines Trainingsalgorithmus werden in unserem Modell die Parameter angepasst, um möglichst viele Daten aus dem Trainingsdatensatz korrekt zu klassifizieren. Nach der Trainingseinheit wird die Qualität des Modells mit Hilfe des Testdatensatzes evaluiert.
+
+Das Ziel dieser Übung ist es, ein besseres Verständnis dafür zu entwickeln, wie maschinelles Lernen funktioniert, indem du selbst mit den verschiedenen Einstellungen eines Perzeptrons experimentierst und die Auswirkungen deiner Änderungen beobachtest.
+
+
+## Verwendung des Perzeptrons
+Im Folgenden siehst du ein Perzeptron mit **5 Eingängen**. Auf der rechten Seite findest du zwei neue Menüpunkte: Unter **Genres** kannst du die Anzahl der Eingänge ändern. Der **Reset**-Button setzt die Gewichte auf die Anfangswerte zurück. Mit **Training** kannst du die Parameter automatisch anpassen lassen. Das Training wird mit dem **Play**-Button gestartet. Der **Forward**-Button erlaubt dir, das Training zu beschleunigen und gleichzeitig zu bestimmen, wie viele Trainingsiterationen durchlaufen werden sollen.
+
+
+</div>
+
+<Perceptron features={5} showTraining={true} showFeatures={true} movieRange ={[10, 30]} info={false} edit={true} showLike={true}/>
+
+<div className="z-10 relative">
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A13 – Stelle sicher, dass du etwa 20 Filme aus der Filmliste kennst. Bewerte dann einen Teil davon. Dies sind deine Trainingsdaten. Wie lange musst du dein Modell trainieren?</summary>
+Die Trainingsdauer hängt von verschiedenen Faktoren ab. Falls es Filme mit gleicher Merkmalsausprägung gibt, die unterschiedlich bewertet wurden, kann das Training unendlich lange dauern, da das Modell versucht, eine nicht erreichbare Perfektion zu erzielen.
+</details>
+
+<div className="z-10 relative">
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A14 – Experimentiere mit unterschiedlichen Anzahlen von Trainingsiterationen. Wie verändert sich die Qualität des Modells mit mehr Trainingseinheiten?</summary>
+Die Beobachtung des Einflusses der Anzahl der Trainingsiterationen auf die Modellqualität ist ein wichtiger Aspekt des maschinellen Lernens. Beachte, dass es ein Punkt gibt, an dem mehr Training nicht unbedingt zu einer Verbesserung der Modellqualität führt. Dieses Phänomen wird als Overfitting bezeichnet.
+</details>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A15 – Was passiert, wenn du den Trainingsprozess mit unterschiedlich vielen Genres durchführst? Bleiben die Ergebnisse gleich oder variieren sie?</summary>
+Durch die Variation der Anzahl der Genres kannst du untersuchen, wie sich die Komplexität der Eingabedaten auf den Trainingsprozess und die Vorhersagegenauigkeit des Modells auswirkt.
+</details>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A16 – Verändere die Bewertungen einiger Filme und starte das Training erneut. Wie wirken sich diese Änderungen auf das Modell aus?</summary>
+Indem du die Bewertungen von Filmen änderst und das Modell erneut trainierst, kannst du erkennen, wie empfindlich das Modell auf Änderungen in den Trainingsdaten reagiert. Dies kann dir dabei helfen, ein besseres Verständnis für das maschinelle Lernen und seine Herausforderungen zu entwickeln.
+</details>
+
+</div>
+
+
+Herzlichen Glückwunsch! Du hast den Lernpfad erfolgreich abgeschlossen. Auf der nächsten Seite findest du ein voll funktionsfähiges Perzeptron, mit dem du frei experimentieren kannst. Viel Spaß!
+
+</div>

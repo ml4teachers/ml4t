@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import { UpdateContext } from '../Perceptron';
-import { TrashIcon, HandThumbUpIcon, HandThumbDownIcon, PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { NoSymbolIcon, TrashIcon, HandThumbUpIcon, HandThumbDownIcon, PencilSquareIcon, CheckIcon } from '@heroicons/react/24/outline'
 
-function Cards() {
-  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, editMovieTitle, editing, setEditing } = useContext(UpdateContext);
+function Cards({ showEdit, showLike }) {
+  const { movies, selectedMovie, setSelectedMovie, deleteMovie, likeMovie, rateMovie, editMovieTitle, editing, setEditing } = useContext(UpdateContext);
   const [editTitle, setEditTitle] = useState('');
 
   const handleCardClick = (movie) => {
@@ -35,6 +35,12 @@ function Cards() {
     e.stopPropagation();
     likeMovie(title);
     setSelectedMovie(null);
+  }
+
+  const handleRatedClick = (e, title) => {
+    e.stopPropagation();
+    rateMovie(title);
+    setSelectedMovie(null);
   }  
 
   const handleEditClick = (e, title) => {
@@ -59,16 +65,17 @@ function Cards() {
   return (
     
     <div className="z-30 flex flex-col justify-center relative text-sm leading-7">
-      <div className="overflow-auto h-64">
+      <div className="overflow-auto h-52 mb-[68px]">
       {movies.map(movie => {
         const colorClass = !movie.rated ? 'bg-gray-100' : movie.like ? 'bg-blue-100' : 'bg-orange-100';
         const borderColor = !movie.rated ? 'border-gray-400' : movie.like ? 'border-blue-300' : 'border-orange-300';
         const isEditing = editing === movie.title;
 
         return (
-          <div 
-            key={movie.title} 
-            className={`group hover:pr-16 relative w-56 my-3 h-8 border-2 ${selectedMovie?.title === movie.title ? borderColor : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
+          <div
+            key={movie.title}
+            title="Film auswählen"
+            className={`${isEditing ? 'hover:pr-11' : 'hover:pr-16'} group relative w-56 my-3 h-8 border-2 ${selectedMovie?.title === movie.title ? borderColor : 'border-gray-300'} rounded-md text-center cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap ${isEditing ? '' : colorClass }`}
             onClick={() => handleCardClick(movie)}
           >
             {isEditing ? (
@@ -87,26 +94,43 @@ function Cards() {
               </div>
             )}
             <div className="absolute right-0 top-1/2 flex">
-              <div 
-                className="transform -translate-y-1/2 opacity-0 group-hover:opacity-100"
-                onClick={(e) => isEditing ? null : handleLikeClick(e, movie.title)}
-                >
-                {isEditing ? (
-                <CheckIcon className="w-5 h-8 text-gray-500 bg-white"/>
-              ) : (movie.like || !movie.rated) ? (
-                <HandThumbUpIcon className="w-5 h-8 text-gray-500"/>
-              ) : (
-                <HandThumbDownIcon className="w-5 h-8 text-gray-500"/>
-              )}
-              </div>
-              <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
-                <PencilSquareIcon
-                    className="w-5 h-8 ml-1 text-gray-500"
-                    onClick={(e) => handleEditClick(e, movie.title)}
-                  />
-              </div>
+              {showLike ? (  
+                <div 
+                  className="transform -translate-y-1/2 opacity-0 group-hover:opacity-100"
+                  onClick={(e) => isEditing ? null : handleLikeClick(e, movie.title)}
+                  >
+                  {isEditing ? (
+                    <CheckIcon title="Bearbeitung beenden" className="w-5 h-8 text-gray-500 bg-white"/>
+                  ) : (movie.like || !movie.rated) ? (
+                    <HandThumbUpIcon title="Like" className="w-5 h-8 text-gray-500"/>
+                  ) : (
+                    <HandThumbDownIcon title="Dislike" className="w-5 h-8 text-gray-500"/>
+                  )}
+                </div>
+              ) : null}
+              {showEdit && !movie.rated ? (
+                <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+                  {!isEditing ? (
+                  <PencilSquareIcon
+                      title="Filmtitel bearbeiten"
+                      className="w-5 h-8 ml-1 text-gray-500"
+                      onClick={(e) => handleEditClick(e, movie.title)}
+                    />
+                    ) : null}
+                </div>
+              ) : null}
+              {movie.rated ? (
+                <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
+                  <NoSymbolIcon
+                      title="Bewertung zurücksetzen"
+                      className="w-5 h-8 ml-1 text-gray-500"
+                      onClick={(e) => handleRatedClick(e, movie.title)}
+                    />
+                </div>
+              ) : null}
               <div className="z-40 transform -translate-y-1/2 opacity-0 group-hover:opacity-100">
                 <TrashIcon
+                  title="Film löschen"
                   className="w-5 h-8 ml-1 text-gray-500"
                   onClick={(e) => handleDeleteClick(e, movie.title)}
                 />

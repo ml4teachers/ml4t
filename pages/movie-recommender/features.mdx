@@ -1,0 +1,22 @@
+import DragAndDrop from '/components/MovieRecommender/DragAndDrop'
+
+
+# Merkmale
+
+Unser Movie Recommender bewertet Filme anhand zweier **Merkmale**: die Filmgenres Action und Comedy. Anhand dieser beiden Merkmale lassen sich Filme bereits in vier verschiedene **Gruppen** einordnen. Ordne die Filme den entsprechenden Feldern zu, indem du sie per Drag-and-Drop verschiebst.
+
+<DragAndDrop />
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A3 – Inwiefern können Empfehlungen für Personen, die einen bestimmten Film aus einer Gruppe mögen, auf andere Filme derselben Gruppe ausgedehnt werden?</summary>
+In dieser Übung erkennst du schnell, dass das Gruppieren von Filmen eine komplexe Aufgabe ist. Filmgenres sind vielfältig und manchmal schwer definierbar. Selbst innerhalb derselben Gruppe können Filme stark variieren. Filme, die beispielsweise weder Action noch Comedy beinhalten, könnten von Drama über Horror bis hin zu Romantik jedes Genre abdecken. Daher wäre es unpassend, einem Liebhaber eines romantischen Dramas einen Horrorfilm zu empfehlen, nur weil beide Filme in dieselbe Kategorie fallen.
+
+Darüber hinaus kann die Zuweisung eines bestimmten Films zu einer Kategorie oft schwierig sein. Viele Filme vereinen Elemente verschiedener Genres, was ihre Klassifizierung kompliziert.
+
+Diese Überlegungen verdeutlichen, dass ein wirksames Empfehlungssystem in der Lage sein muss, die Nuancen und die Vielfalt von Filmgenres zu berücksichtigen, um präzise Empfehlungen abgeben zu können.
+</details>
+
+In der Realität zeigen dir Movie Recommender [wie beispielsweise bei Netflix](https://www.wired.co.uk/article/how-do-netflixs-algorithms-work-machine-learning-helps-to-predict-what-viewers-will-like) Filme nicht bloß basierend auf Genre-Gruppen. Vielmehr wirst du aufgrund deines Klickverhaltens einer Benutzergruppe zugeordnet, die ähnliche Filme anschaut. Doch was geschieht eigentlich auf mathematischer Ebene, wenn ein Recommendersystem durch maschinelles Lernen deinen Geschmack erlernt und dir daraufhin passende Videos oder Produkte anzeigt?
+
+Um dies zu verstehen, betrachten wir ein einfaches **Perzeptron**. Dieses verarbeitet drei Eingaben und trifft auf deren Basis eine Aussage darüber, ob eine Person einen Film mag oder nicht.
+

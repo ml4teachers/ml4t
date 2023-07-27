@@ -9,15 +9,48 @@
       "pagination": false
     }
   },
+  "alternative": {
+    "display": "hidden",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false
+    }
+  },
+  "song-recommender": {
+    "title": "Song Recommender",
+    "type": "page",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false
+    }
+  },
+  "movie-recommender": {
+    "title": "Movie Recommender",
+    "type": "page",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": true,
+      "toc": true,
+      "pagination": true
+    }
+  },
   "print": {
-    "title": "Unterrichtsmaterial",
+    "title": "Unplugged",
     "type": "page",
     "theme": {
       "breadcrumb": false,
       "footer": false,
       "sidebar": false,
       "toc": false,
-      "pagination": false
+      "pagination": false,
+      "timestamp": false
     }
   }
 }

@@ -1,0 +1,32 @@
+import Perceptron from '/components/Perceptron'
+
+<div className="z-10 relative">
+# Training durch Experimentieren
+
+In diesem Abschnitt beschäftigen wir uns mit einer alternativen Darstellung eines Perzeptrons, das nur einen Eingang für das Merkmal *Action* hat. Wir werden durch Experimentieren herausfinden, wie sich verschiedene Parameterwerte des Perzeptrons auf die Filmbewertungen auswirken.
+
+Rechts siehst du zwei zufällige Filmkarten. Durch einen Klick auf eine Filmkarte wird diese auf das Perzeptron gelegt. Die aktive Filmkarte zeigt an, ob der Film das Merkmal *Action* besitzt oder nicht. Ist das Merkmal nicht aktiv, wird das Genre durchgestrichen. Über den Filmkarten kannst du durch Klicken auf die **plus**- und **minus**-Symbole weitere Filme hinzufügen und entfernen. Mit einem Klick auf das **Refresh**-Symbol kannst du zwei neue zufällige Filme laden.
+
+Die beiden **Zahlenbalken** von -3 bis 3 repräsentieren die Parameter des Perzeptrons. Der linke Balken steht für die Gewichtung des **Merkmals** *Action*, der rechte für den **Schwellenwert**. Das Perzeptron prüft nun, ob die Ungleichung erfüllt ist. Ist der linke Wert größer als der rechte, zeigt die aktive Filmkarte <a style={{color:"rgb(96 165 250", fontWeight: "bold"}}>Like</a>, andernfalls <a style={{color:"rgb(251 146 60", fontWeight: "bold"}}>Dislike</a>.
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A8 – Wie müssen die Parameterwerte eingestellt sein, damit Actionfilme negativ bewertet werden und alle anderen Filme positiv?</summary>
+Beide Parameter müssen negativ sein und die Gewichtung von 'Action' sollte mindestens genauso negativ wie der Schwellenwert sein, zum Beispiel:
+```
+Action = -1
+Schwellenwert = -1
+
+```
+</details>
+
+</div>
+
+<Perceptron features={1} showTraining={false} showFeatures={false} movieRange ={[2, 4]} info={false} edit={false} showLike={false}/>
+
+<div className="z-10 relative">
+
+Was wir bisher gemacht haben, gehört noch nicht zum maschinellen Lernen. Es handelt sich um eine experimentelle Methode, um zu verstehen, wie sich die Änderung der Parameterwerte auf die Filmbewertung auswirkt. In diesem Experiment konnten wir die Parameterwerte **manuell** anpassen und beobachten, wie sich diese Veränderungen auf die Bewertung eines Films auswirken.
+
+Nun sind wir bereit, einen Schritt weiter zu gehen und das Prinzip des **Trainings** zu erlernen, das eine grundlegende Voraussetzung für das maschinelle Lernen ist. Im nächsten Abschnitt werden wir ein interaktives Perzeptron mit einer neuen Funktion kennenlernen. Mit dieser Funktion können wir das Perzeptron basierend auf unseren eigenen Filmbewertungen manuell trainieren und so den Grundstein für die späteren maschinellen Lernmethoden legen.
+
+</div>

@@ -25,13 +25,18 @@ function MovieInfo({ movie, closeMovieInfo }) {
       <div onClick={(e) => e.stopPropagation()} className={`p-4 border-2 border-gray-400 lg:w-2/3 rounded-lg shadow-lg ${colorClass}`}>
         <div className="flex">
             <h2 className="text-2xl mb-2 flex-1">{movie.title}</h2>
-            <XCircleIcon className="w-6 h-6 text-gray-500 cursor-pointer flex-2" onClick={closeMovieInfo}/>
+            <XCircleIcon title="Filminformationen schliessen" className="w-6 h-6 text-gray-500 cursor-pointer flex-2" onClick={closeMovieInfo}/>
         </div>
         <div className="mb-4 text-gray-500 text-sm">{`(`}{movie.genres.join(', ')}{`)`}</div>
 
         <div className="flex justify-center">
             <div className="flex-1 text-sm mr-4">
+              <div>
                 {movie.summary}
+              </div>
+              <div className="mt-4">
+                (Filmdaten von <a className="underline hover:font-semibold" href={`https://www.themoviedb.org/movie/${movie.id}`}>themoviedb.org</a>)
+              </div>
             </div>
             <img src={movie.poster} alt={movie.title} className="w-32 h-48 rounded-md border border-gray-500" />
         </div>

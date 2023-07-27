@@ -1,0 +1,43 @@
+import Parameters from '/components/MovieRecommender/Parameters'
+
+# Parameter
+<div className="flex md:flex-col">
+    <div className="flex-1">
+    Die interaktive Darstellung rechts zeigt ein Perzeptron mit zwei Eingängen. Mit den **plus**- und **minus**-Symbolen können wir drei Parameter steuern:
+    - Gewichtung von Eingang 1 (Action)
+    - Gewichtung von Eingang 2 (Comedy)
+    - Schwellenwert
+
+    Durch das Verändern dieser Parameter können wir beeinflussen, ob ein Film mit bestimmten Merkmalen die Bewertung **Like** oder **Dislike** erhält.
+    </div>
+        <div className="w-80">
+        <Parameters />
+    </div>
+</div>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A5 – Wie müssen die Parameter eingestellt sein, damit der Film Batman (Action: ja, Comedy: nein) die Bewertung 'Like' erhält?</summary>
+Die Gewichtung von Eingang 1 muss mindestens 1 Einheit größer sein als der Schwellenwert, zum Beispiel:
+```
+- Gewichtung 1:  2, Schwellenwert:  1 (oder kleiner)
+- Gewichtung 1: -1, Schwellenwert: -2 (oder kleiner)
+```
+Die Gewichtung von Eingang 2 ist für den Film Batman irrelevant, da die Comedy-Eigenschaft bei diesem Film nicht aktiv ist.
+</details>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A6 – Wie müssen die Parameter eingestellt sein, damit nur Filme positiv bewertet werden, die weder dem Genre Action noch Comedy zugeordnet sind?</summary>
+Der Schwellenwert sollte höchstens -1 sein, um Filme ohne Genre-Eigenschaft zu berücksichtigen. Beide Gewichtungen sollten ebenfalls negativ sein, damit die gewichtete Summe unter dem Schwellenwert liegt, wenn ein Eingang aktiv ist.
+</details>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A7 – Wie muss ich die Parameter anpassen, um folgenden Filmgeschmack abzubilden?<ul>Action: Dislike</ul><ul>Comedy: Dislike</ul><ul>Action-Comedy: Like</ul><ul>Weder noch: Dislike</ul></summary>
+Der Schwellenwert muss niedriger als die Summe der beiden Gewichtungen sein und sollte mindestens so hoch wie die einzelnen Gewichtungen sein. Ein möglicher Satz von Parametern könnte beispielsweise folgendermaßen aussehen:
+```
+- Gewichtung 1:  1
+- Gewichtung 2:  1
+- Schwellenwert: 1
+```
+</details>
+
+Bisher haben wir die Parameter manuell angepasst. Selbst bei nur zwei Merkmalen kann das Anpassen dieser Werte recht aufwändig sein, insbesondere wenn wir ein spezifisches Muster für die Filmklassifizierung erreichen wollen. Stell dir vor, wie komplex es wäre, wenn wir Dutzende oder sogar Hunderte von Merkmalen berücksichtigen müssten! Zum Glück können wir auf Techniken des maschinellen Lernens zurückgreifen, um diesen Prozess zu automatisieren und effizienter zu gestalten. Im nächsten Abschnitt werden wir diese Techniken untersuchen und lernen, wie sie uns dabei helfen können, die optimalen Parameterwerte zu finden.

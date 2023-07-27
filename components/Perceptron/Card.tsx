@@ -4,7 +4,7 @@ import { genres } from "../data/genres.js";
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
 
-function Card() {
+function Card({ showInfo }) {
   const { selectedMovie, setSelectedMovie, changeMovieCategory, classes, openMovieInfo, editing, setEditing } = useContext(UpdateContext);
   const [movieCategories, setMovieCategories] = useState(new Array(classes).fill(false));
   
@@ -43,10 +43,12 @@ function Card() {
   return (
     <div className={`z-30 absolute mr-12 h-24 border-2 ${borderColor} rounded-md`} style={{ width: `${cardWidth}rem` }}>
       <div className="relative h-full">
-        <div className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass} cursor-pointer`} onClick={() => setSelectedMovie(null)}>
-          <div className="text-center text-sm mt-2 pr-7 overflow-hidden overflow-ellipsis whitespace-nowrap px-2">{selectedMovie.title}</div>
+        <div title="Filmauswahl aufheben" className={`absolute top-0 left-0 w-full h-[30px] rounded-t-md ${colorClass} cursor-pointer`} onClick={() => setSelectedMovie(null)}>
+          <div className={`text-center text-sm mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap px-2 ${showInfo ? 'pr-7' : ''}`}>{selectedMovie.title}</div>
         </div>
-        <InformationCircleIcon className="z-40 absolute w-6 right-1 pt-1 text-gray-400 hover:text-gray-600 cursor-pointer" onClick={showMovieInfo}/>
+        {showInfo ? (
+          <InformationCircleIcon title="Filminformationen anzeigen" className="z-40 absolute w-6 right-1 pt-1 text-gray-400 hover:text-gray-600 cursor-pointer" onClick={showMovieInfo}/>
+        ): null}
         <div className={`absolute top-6 left-0 w-[14px] h-10 ${colorClass}`}></div>
         <div className={`absolute flex bottom-0 left-0 w-full h-[30px] rounded-b-md ${colorClass}`}>
           <div className="absolute flex">
@@ -56,7 +58,7 @@ function Card() {
                 key={index} 
                 className={`w-16 text-xs text-center mt-1 ${isActive ? '' : 'line-through text-gray-400'}`}
               >
-                <div className={`${editing ? 'bg-white bg-opacity-70' : ''}`}>
+                <div>
                   {genres[index]}
                 </div>
               </div>
@@ -76,7 +78,7 @@ function Card() {
         }
         {
           Array.from({ length: classes }, (_, i) => (
-              <div key={i} className={`z-40 absolute top-7 w-8 h-16 cursor-pointer`} onClick={() => handleCategoryClick(i)}
+              <div title="Ausprägung ändern" key={i} className={`z-40 absolute top-7 w-8 h-16 cursor-pointer`} onClick={() => handleCategoryClick(i)}
               style={{ right: `${1.9 + 4 * i}rem` }}></div>
           ))
         }

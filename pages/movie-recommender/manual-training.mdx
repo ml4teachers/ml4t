@@ -1,0 +1,67 @@
+import Perceptron from '/components/Perceptron'
+
+<div className="z-10 relative">
+
+# Manuelles Training
+Nun haben wir die Möglichkeit, das Perzeptron zu **trainieren**. Wir können dies tun, indem wir unsere eigenen Filmbewertungen hinzufügen und beobachten, wie das Perzeptron darauf reagiert. Dies hilft uns, ein grundlegendes Verständnis dafür zu entwickeln, wie maschinelles Lernen funktioniert.
+
+Weiter unten findest du ein Perzeptron mit **zwei Eingängen** sowie eine Liste mit Filmkarten. Wenn du mit der Maus über die Filmkahrten fährst, kannst du jeden Film nach deinen persönlichen Vorlieben **bewerten**: Daumen nach oben färbt die Filmkarte blau (<a style={{color:"rgb(96 165 250", fontWeight: "bold"}}>Like</a>) und Daumen nach unten bedeutet <a style={{color:"rgb(251 146 60", fontWeight: "bold"}}>Dislike</a>. Falls du einen Film nicht kennst, kannst du durch einen Klick auf das **Bleistiftsymbol** den Titel ändern. Sollte die Merkmalausprägung nicht deiner Einschätzung entsprechen, kannst du diese bei ausgewählter Filmkarte links anpassen.
+
+## Trainingsalgorithmus
+Unser Trainingsalgorithmus funktioniert folgendermaßen: Wenn du einen Film auswählst, überprüfst du, ob dieser korrekt klassifiziert wird. Gibt das Perzeptron <a style={{color:"rgb(96 165 250", fontWeight: "bold"}}>Like</a> aus, obwohl du den Film mit <a style={{color:"rgb(251 146 60", fontWeight: "bold"}}>Dislike</a> bewertet hast, klicke bei allen aktiven Parametern auf das **Minus**, um die Gewichtungen zu verringern und den Schwellenwert zu erhöhen. Steht auf dem Perzeptron <a style={{color:"rgb(251 146 60", fontWeight: "bold"}}>Dislike</a>, obwohl es <a style={{color:"rgb(96 165 250", fontWeight: "bold"}}>Like</a> anzeigen müsste, klickst du auf die **plus**-Symbole der aktiven Parameter.
+
+Das Trainieren eines Perzeptrons ist oft ein **iterativer Prozess**, in dem die Gewichtungen und Schwellenwerte nach und nach angepasst werden, bis das Perzeptron akzeptable Vorhersagen trifft. Wenn das Perzeptron eine falsche Voraussage trifft, sind Anpassungen der Gewichtungen und des Schwellenwerts notwendig.
+
+</div>
+
+<Perceptron features={2} showTraining={false} showFeatures={false} movieRange ={[4, 4]} info={false} edit={true} showLike={true}/>
+
+<div className="z-10 relative">
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A9 – Warum sind "Plus" und "Minus" beim Schwellenwert vertauscht?</summary>
+Eine höhere Gewichtung eines Merkmals führt dazu, dass der Film positiver bewertet wird. Das Gleiche geschieht, wenn der Schwellenwert verringert wird. Somit repräsentiert das **Plus** eine Änderung der Parameter, die zu einer besseren Filmbewertung führt, während das **Minus** eine Verschlechterung der Bewertung bedeutet.
+</details>
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A10 – Wähle vier Filme mit unterschiedlichen Ausprägungen und bewerte sie. Kannst du die Parameter mit "Plus" und "Minus" so verändern, damit alle Filme entsprechend deiner Bewertung klassifiziert werden?</summary>
+Ja, das ist grundsätzlich möglich. Es gibt jedoch zwei Ausnahmen, siehe Aufgabe A12.
+</details>
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A11 – Halte den Trainingsalgorithmus in deinen eigenen Worten oder als Pseudocode fest.</summary>
+```
+Während (Voraussagen stimmen nicht bei allen vier Filmen):
+    Wähle den nächsten Film aus
+    Wenn (Summe der aktiven Gewichte > Schwellenwert):
+        Voraussage = Like
+    Sonst:
+        Voraussage = Dislike
+    Wenn (Voraussage < Tatsächliche Bewertung):
+        Erhöhe aktive Gewichtungen um + 1
+        Verringere Schwellenwert um -1
+    Sonst wenn (Voraussage > Tatsächliche Bewertung):
+        Verringere aktive Gewichtungen um - 1
+        Erhöhe Schwellenwert um + 1
+
+```
+</details>
+
+
+Indem wir die Parameter anpassen, 'lernt' das Perzeptron, wo es die Trennlinie zwischen den positiv und negativ bewerteten Filmen ziehen muss. Folgende Klassifikation kann jedoch für das Perzeptron schwierig sein:
+
+```
+Action (0), Comedy (0) : Dislike
+Action (1), Comedy (0) : Like
+Action (0), Comedy (1) : Like
+Action (1), Comedy (1) : Dislike
+```
+
+<details>
+<summary className="cursor-pointer" style={{fontWeight: "bold"}}>A12 – Wie oft musst du die Parameter anpassen, damit das Perzeptron diese Klassifikation erlernt und die Filme korrekt bewertet?</summary>
+Diese ungewöhnliche Geschmackspräferenz deutet darauf hin, dass die Person Actionfilme und Komödien mag, Action-Komödien jedoch ablehnt. Auch alle anderen Filmgenres scheinen der Person nicht zu gefallen. Das ist nicht nur für uns schwer nachzuvollziehen, sondern auch das Perzeptron kann diese Präferenzen nicht lernen, da es **keine lineare Trennung** zwischen den Gruppen ziehen kann.
+</details>
+
+Auf der nächsten Seite werden wir sehen, wie wir diesen Trainingsalgorithmus für maschinelles Lernen nutzen können.
+
+</div>
+
