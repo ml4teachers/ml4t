@@ -9,6 +9,16 @@
       "pagination": false
     }
   },
+  "impressum": {
+    "display": "hidden",
+    "theme": {
+      "breadcrumb": false,
+      "footer": false,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false
+    }
+  },
   "alternative": {
     "display": "hidden",
     "theme": {

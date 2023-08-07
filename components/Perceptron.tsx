@@ -158,7 +158,7 @@ function Perceptron(
       likeMovie, rateMovie, editMovieTitle, changeMovieCategory
       }}>
       {showMovieInfo && <MovieInfo movie={selectedMovie} closeMovieInfo={closeMovieInfo} />}
-      <div className="flex flex-col md:flex-row justify-center align-items">
+      <div className="flex flex-col md:flex-row justify-center align-items select-none">
         <div className="flex justify-center items-center my-10 mr-32 relative">
           <Card showInfo={info} />
           <Overlay />

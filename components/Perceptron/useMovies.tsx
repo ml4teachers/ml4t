@@ -34,10 +34,17 @@ function useMovies(initialCount, maxCount) {
   
         setAllMovies(reformattedData);
         const initialMovies = [];
+
+        let remainingMovies = [...reformattedData];
+
         for(let i = 0; i < initialCount; i++){
-          const movie = getFirstSelection(reformattedData);
-          initialMovies.push(movie);
-          reformattedData.splice(reformattedData.findIndex(m => m.id === movie.id), 1);
+            if (remainingMovies.length > 0) {
+                const movieToAdd = addSmartMovieLogic(remainingMovies, initialMovies);
+                if (movieToAdd) {
+                    initialMovies.push(movieToAdd);
+                    remainingMovies = remainingMovies.filter(m => m.id !== movieToAdd.id);
+                }
+            }
         }
         setMovies(initialMovies);
       })
@@ -74,10 +81,6 @@ function useMovies(initialCount, maxCount) {
     return allSelectedMovies;
   }
 
-
-
-  
-
   const resetMovies = () => {
     fetchAndSetMovies();
   };
@@ -88,47 +91,6 @@ function useMovies(initialCount, maxCount) {
     return array[index];
   }
   
-  function getSmartSelection(array, count) {
-    const tempArray = [...array];
-    const result = [];
-    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5'];
-    
-    for (let i = 0; i < genreCategories.length; i++) {
-      let moviesWithGenre = tempArray.filter(movie => movie[genreCategories[i]] === 1 && !hasGenreOverlap(movie, result));
-      if (moviesWithGenre.length > 0) {
-        const index = Math.floor(Math.random() * moviesWithGenre.length);
-        result.push(moviesWithGenre[index]);
-        tempArray.splice(tempArray.findIndex(movie => movie.id === moviesWithGenre[index].id), 1);
-      }
-      let moviesWithoutGenre = tempArray.filter(movie => movie[genreCategories[i]] === 0 && !hasGenreOverlap(movie, result));
-      if (moviesWithoutGenre.length > 0) {
-        const index = Math.floor(Math.random() * moviesWithoutGenre.length);
-        result.push(moviesWithoutGenre[index]);
-        tempArray.splice(tempArray.findIndex(movie => movie.id === moviesWithoutGenre[index].id), 1);
-      }
-    }
-    
-    while (result.length < count && tempArray.length > 0) {
-      const weights = tempArray.map(movie => movie.popularity);
-      const index = weightedRandomIndex(weights);
-    
-      if (!hasGenreOverlap(tempArray[index], result)) {
-        result.push(tempArray[index]);
-        tempArray.splice(index, 1);
-      } else {
-        tempArray.splice(index, 1);
-      }
-    }
-      
-    return result;
-  }
-  
-  
-  function hasGenreOverlap(movie, movies) {
-    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9'];
-    return movies.some(m => genreCategories.every(category => m[category] === movie[category]));
-  }
-
   function weightedRandomIndex(weights) {
     const totalWeight = weights.reduce((a, b) => a + b, 0);
     const randomNum = Math.random() * totalWeight;
@@ -146,34 +108,63 @@ function useMovies(initialCount, maxCount) {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.title !== title));
   };
 
-  const isGenreCombinationUnique = (newMovie, movies) => {
-    const genreCategories = ['cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6', 'cat7', 'cat8', 'cat9'];
-    return !movies.some(m => genreCategories.every(category => m[category] === newMovie[category]));
-  };
-
-  const generateUniqueMovie = (remainingMovies, existingMovies) => {
-    for(let movie of remainingMovies){
-      if(isGenreCombinationUnique(movie, existingMovies)){
-        return movie;
-      }
+  function generateCombinations(length) {
+    const result = [];
+    for (let i = 0; i < Math.pow(2, length); i++) {
+      result.push(i.toString(2).padStart(length, '0').split('').map(Number));
     }
-    return null;
-  };
+    return result;
+  }
+  
+
+  function addSmartMovieLogic(remainingMovies, currentMovies) {
+    let selectedMovie = null;
+    let categoriesToConsider;
+
+    if (currentMovies.length < 2) {
+        // Für den ersten und den zweiten Film
+        categoriesToConsider = 1;
+    } else {
+        // Ab dem dritten Film
+        categoriesToConsider = Math.ceil(Math.log2(currentMovies.length + 1));
+    }
+    
+    const allCombinations = generateCombinations(categoriesToConsider);
+    const existingCombinations = currentMovies.map(movie => {
+        return Array.from({ length: categoriesToConsider }, (_, i) => movie['cat' + (i + 1)]);
+    });
+    
+    const neededCombinations = allCombinations.filter(combination => 
+        !existingCombinations.some(existingComb => JSON.stringify(existingComb) === JSON.stringify(combination))
+    );
+
+    const possibleMovies = remainingMovies.filter(movie => 
+        neededCombinations.some(neededComb => 
+            neededComb.every((value, index) => movie['cat' + (index + 1)] === value)
+        )
+    );
+
+    if (possibleMovies.length > 0) {
+        const weights = possibleMovies.map(movie => movie.popularity);
+        const index = weightedRandomIndex(weights);
+        selectedMovie = possibleMovies[index];
+    }
+
+    return selectedMovie;
+  }
 
   const addSmartMovie = () => {
     if (movies.length < maxCount) {
-      const remainingMovies = allMovies.filter(movie => !movies.find(m => m.id === movie.id));
-      if (remainingMovies.length > 0) {
-        const uniqueMovie = generateUniqueMovie(remainingMovies, movies);
-        if (uniqueMovie) {
-          setMovies(prevMovies => [...prevMovies, uniqueMovie]);
+        const remainingMovies = allMovies.filter(movie => !movies.find(m => m.id === movie.id));
+        const movieToAdd = addSmartMovieLogic(remainingMovies, movies);
+        if (movieToAdd) {
+            setMovies(prevMovies => [...prevMovies, movieToAdd]);
         } else {
-          const smartMovie = getSmartSelection(remainingMovies, 1)[0];
-          setMovies(prevMovies => [...prevMovies, smartMovie]);
+            console.warn("Kein passender Film gefunden.");
         }
-      }
     }
-  };
+};
+
 
 
   return { movies, setMovies, deleteMovie, addSmartMovie, resetMovies, generateCards };

@@ -29,7 +29,7 @@ const config: DocsThemeConfig = {
   footer: {
     text: (
       <span>
-        © {new Date().getFullYear()} Thomas Zurfluh
+        © {new Date().getFullYear()} <a href="/impressum">Thomas Zurfluh</a>
       </span>
     )
   },

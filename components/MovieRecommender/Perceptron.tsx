@@ -54,7 +54,7 @@ const Perceptron = () => {
   };
 
   return (
-    <div className="flex flex-col pl-4">
+    <div className="flex flex-col pl-4 select-none">
     <div className="w-64 h-64 text-2xl">
       <svg viewBox = "0 0 500 500">
         <path d="M 125 100 C 175 100, 175 250, 225 250" stroke="#3399ff" strokeWidth="6" fill="none" stroke-dasharray="10,5"/>

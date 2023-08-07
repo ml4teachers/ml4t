@@ -56,7 +56,7 @@ const Parameters = () => {
   };
 
   return (
-    <div className="flex flex-col pl-4">
+    <div className="flex flex-col pl-4 select-none">
     <div className="w-80 h-54 text-2xl pb-4">
       <svg viewBox = "0 0 500 320">
         <line x1="125" y1="100" x2="225" y2="100" stroke={w1 === 0 ? "none" : w1 > 0 ? "#3399ff" : "#da5f31"} strokeWidth={w1 !== 0 ? Math.abs(w1)*4 : 0} stroke-dasharray="10,5"/>
@@ -66,8 +66,8 @@ const Parameters = () => {
         <rect className="cursor-pointer" onClick={toggleComedy} x="25" y="200" rx="10" ry="10" width="100" height="100" style={{fill:comedy?'#2b665b':'white', stroke:'#2b665b', strokeWidth:5}} />
         <rect x="225" y="50" rx="10" ry="10" width="100" height="100" style={{fill:'white', stroke:'#2b665b', strokeWidth:5}} />
         <rect x="375" y="50" rx="10" ry="10" width="100" height="100" style={{fill:(action*w1+comedy*w2>b ? '#2b665b' : 'white'), stroke:'#2b665b', strokeWidth:5}} />
-        <text x="75" y="40" text-anchor="middle">Action: {action?'ja':'nein'}</text>
-        <text x="75" y="190" text-anchor="middle">Comedy: {comedy?'ja':'nein'}</text>
+        <text x="75" y="40" text-anchor="middle" onClick={toggleAction} className="cursor-pointer">Action: {action?'ja':'nein'}</text>
+        <text x="75" y="190" text-anchor="middle" onClick={toggleComedy} className="cursor-pointer">Comedy: {comedy?'ja':'nein'}</text>
         <text x="425" y="40" textAnchor="middle">{(action*w1+comedy*w2)>b ? 'Like':'Dislike'}</text>
         <rect id="w1_minus" className="cursor-pointer" onClick={W1minus} x="35" y="105" rx="4" ry="4" width="35" height="35" style={{fill: 'white', stroke: '#2b665b', strokeWidth:4}}/>
         <rect id="w1_plus" className="cursor-pointer" onClick={W1plus} x="80" y="105" rx="4" ry="4" width="35" height="35" style={{fill: 'white', stroke: '#2b665b', strokeWidth:4}}/>

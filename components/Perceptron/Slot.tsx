@@ -39,12 +39,12 @@ function Slot({ category, reversed, active }) {
       </div>
       <div className="w-8 h-40 -mt-24 flex justify-center items-center bg-white text-white absolute" style={{ top: '0', transform: `translateY(${offsetButtons}rem)`, transition: 'transform 0.5s ease-in-out' }}>
         <div className="w-8 h-8 justify-center flex border border-gray-300 mt-32 items-center">
-          <div title={reversed ? 'Schwellenwert erhöhen' : 'Gewichtung erhöhen'} className={`w-6 h-6 rounded-full text-center border border-gray-400 cursor-pointer ${reversed ? 'bg-orange-300 text-3xl leading-4' : 'bg-blue-300 text-xl leading-5'}`} onClick={() => change(+1)}>{reversed ? '-' : '+'}</div>
+          <div title={reversed ? 'Bewertung verringern, indem Schwellenwert erhöht wird' : 'Gewichtung erhöhen'} className={`w-6 h-6 rounded-full text-center border border-gray-400 cursor-pointer ${reversed ? 'bg-orange-300 text-3xl leading-4' : 'bg-blue-300 text-xl leading-5'}`} onClick={() => change(+1)}>{reversed ? '-' : '+'}</div>
         </div>
       </div>
       <div className="w-8 h-40 -mb-24 flex justify-center bg-white items-center border-white text-white absolute" style={{ bottom: '0', transform: `translateY(${offsetButtons}rem)`, transition: 'transform 0.5s ease-in-out' }}>
         <div className="w-8 h-8 justify-center flex border border-gray-300 mb-32 items-center">
-          <div title={reversed ? 'Schwellenwert verringern' : 'Gewichtung verringern'} className={`w-6 h-6 rounded-full text-center border border-gray-400 cursor-pointer ${reversed ? 'bg-blue-300 text-xl leading-5' : 'bg-orange-300 text-3xl leading-4'}`} onClick={() => change(-1)}>{reversed ? '+' : '-'}</div>
+          <div title={reversed ? 'Bewertung erhöhen, indem Schwellenwert verringert wird' : 'Gewichtung verringern'} className={`w-6 h-6 rounded-full text-center border border-gray-400 cursor-pointer ${reversed ? 'bg-blue-300 text-xl leading-5' : 'bg-orange-300 text-3xl leading-4'}`} onClick={() => change(-1)}>{reversed ? '+' : '-'}</div>
         </div>
       </div>
     </div>
