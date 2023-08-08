@@ -120,38 +120,57 @@ function useMovies(initialCount, maxCount) {
   function addSmartMovieLogic(remainingMovies, currentMovies) {
     let selectedMovie = null;
     let categoriesToConsider;
-
+  
     if (currentMovies.length < 2) {
-        // Für den ersten und den zweiten Film
-        categoriesToConsider = 1;
+      // Für den ersten und den zweiten Film
+      categoriesToConsider = 1;
     } else {
-        // Ab dem dritten Film
-        categoriesToConsider = Math.ceil(Math.log2(currentMovies.length + 1));
+      // Ab dem dritten Film
+      categoriesToConsider = Math.ceil(Math.log2(currentMovies.length + 1));
     }
-    
+  
     const allCombinations = generateCombinations(categoriesToConsider);
     const existingCombinations = currentMovies.map(movie => {
-        return Array.from({ length: categoriesToConsider }, (_, i) => movie['cat' + (i + 1)]);
+      return Array.from({ length: categoriesToConsider }, (_, i) => movie['cat' + (i + 1)]);
     });
-    
-    const neededCombinations = allCombinations.filter(combination => 
-        !existingCombinations.some(existingComb => JSON.stringify(existingComb) === JSON.stringify(combination))
+  
+    let neededCombinations = allCombinations.filter(combination =>
+      !existingCombinations.some(existingComb => JSON.stringify(existingComb) === JSON.stringify(combination))
     );
-
-    const possibleMovies = remainingMovies.filter(movie => 
-        neededCombinations.some(neededComb => 
-            neededComb.every((value, index) => movie['cat' + (index + 1)] === value)
+  
+    let possibleMovies = remainingMovies.filter(movie =>
+      neededCombinations.some(neededComb =>
+        neededComb.every((value, index) => movie['cat' + (index + 1)] === value)
+      )
+    );
+  
+    while (!possibleMovies.length && categoriesToConsider > 0) {
+      categoriesToConsider--;  // Reduziere die Kategorien
+      const reducedCombinations = generateCombinations(categoriesToConsider);
+      const reducedExistingCombinations = currentMovies.map(movie => {
+        return Array.from({ length: categoriesToConsider }, (_, i) => movie['cat' + (i + 1)]);
+      });
+  
+      neededCombinations = reducedCombinations.filter(combination =>
+        !reducedExistingCombinations.some(existingComb => JSON.stringify(existingComb) === JSON.stringify(combination))
+      );
+  
+      possibleMovies = remainingMovies.filter(movie =>
+        neededCombinations.some(neededComb =>
+          neededComb.every((value, index) => movie['cat' + (index + 1)] === value)
         )
-    );
-
-    if (possibleMovies.length > 0) {
-        const weights = possibleMovies.map(movie => movie.popularity);
-        const index = weightedRandomIndex(weights);
-        selectedMovie = possibleMovies[index];
+      );
     }
-
+  
+    if (possibleMovies.length > 0) {
+      const weights = possibleMovies.map(movie => movie.popularity);
+      const index = weightedRandomIndex(weights);
+      selectedMovie = possibleMovies[index];
+    }
+  
     return selectedMovie;
   }
+  
 
   const addSmartMovie = () => {
     if (movies.length < maxCount) {

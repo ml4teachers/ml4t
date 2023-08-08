@@ -35,7 +35,7 @@ function MovieInfo({ movie, closeMovieInfo }) {
                 {movie.summary}
               </div>
               <div className="mt-4">
-                (Filmdaten von <a className="underline hover:font-semibold" href={`https://www.themoviedb.org/movie/${movie.id}`}>themoviedb.org</a>)
+                (Filmdaten von <a className="underline hover:font-semibold" href={`https://www.themoviedb.org/movie/${movie.id}`} target="_blank" rel="noopener noreferrer">themoviedb.org</a>)
               </div>
             </div>
             <img src={movie.poster} alt={movie.title} className="w-32 h-48 rounded-md border border-gray-500" />
