@@ -23,5 +23,8 @@
       "sidebar": false,
       "pagination": true
     }
+  },
+  "embeddings": {
+    "display": "hidden"
   }
 }
